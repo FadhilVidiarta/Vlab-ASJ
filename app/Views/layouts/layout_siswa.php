@@ -193,7 +193,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
                         <form action="<?= base_url('siswa/dashboard/update_profile') ?>" method="post">
-                            <input type="hidden" name="from_popup" value="1">
+                            <input type="hidden" name="from_popup" value="0">
 
                             <div class="modal-body p-4">
                                 <div class="mb-3">
@@ -263,7 +263,7 @@
                                     <div class="input-group">
                                         <span class="input-group-text bg-white border-end-0 border-danger"><i
                                                 class="fa-solid fa-lock text-danger"></i></span>
-                                        <input type="password" name="password" id="passwordLama"
+                                        <input type="password" name="password_lama" id="passwordLama"
                                             class="form-control border-start-0 border-end-0 border-danger bg-opacity-10"
                                             placeholder="Masukkan password saat ini" required>
                                         <span class="input-group-text bg-white border-start-0 border-danger"

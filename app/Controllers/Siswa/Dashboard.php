@@ -18,34 +18,29 @@ class Dashboard extends BaseController
         $nilaiModel = new NilaiModel();
 
         $userId = session()->get('id');
-
-        // Ambil data user
         $userData = $userModel->find($userId);
 
-        // 1. SAFETY CHECK
         if (!$userData) {
             return redirect()->to('auth/logout');
         }
 
         $namaLengkap = (string) ($userData['nama_lengkap'] ?? 'Siswa');
         $namaDepan = explode(' ', $namaLengkap)[0];
-        $isProfileIncomplete = empty($userData['kelas']) || empty($userData['no_absen']) || $userData['kelas'] == 'Umum';
+
+        $isProfileIncomplete = empty($userData['kelas']) || empty($userData['no_absen']) || $userData['kelas'] == 'Umum' || empty($userData['password']);
 
         $materiTerbaru = $materiModel->where('status', 'aktif')->orderBy('idMateri', 'DESC')->limit(3)->findAll();
         $ujianAktif = $ujianModel->where('status', 'aktif')->orderBy('created_at', 'DESC')->limit(3)->findAll();
 
-        // REVISI: Menggunakan idUser (bukan siswa_id)
         $nilaiSiswa = $nilaiModel->where('idUser', $userId)->findAll();
         $nilaiMap = [];
 
         foreach ($nilaiSiswa as $n) {
-            // REVISI: Menggunakan idUjian (bukan ujian_id)
             $nilaiMap[$n['idUjian']] = $n['nilai_akhir'];
         }
 
         $ujianAktifFinal = [];
         foreach ($ujianAktif as $u) {
-            // REVISI: Menggunakan idUjian (bukan id) karena Primary Key tabel ujian sudah diubah
             if (array_key_exists($u['idUjian'], $nilaiMap)) {
                 $u['sudah_dikerjakan'] = true;
                 $u['nilai'] = $nilaiMap[$u['idUjian']];
@@ -75,11 +70,10 @@ class Dashboard extends BaseController
         $userModel = new UserModel();
         $idUser = session()->get('id');
         $userSaatIni = $userModel->find($idUser);
+        $isPopup = $this->request->getPost('from_popup');
 
-        // SUBMIT BERASAL DARI POP-UP LENGKAPI PROFIL (GOOGLE)
-
-        if ($this->request->getPost('from_popup') == '1') {
-
+        // LENGKAPI PROFIL (Google Login Pertama Kali)
+        if ($isPopup == '1') {
             $rulesPopup = [
                 'nama_lengkap' => 'required|min_length[3]',
                 'kelas' => 'required',
@@ -99,58 +93,60 @@ class Dashboard extends BaseController
             ];
 
             $userModel->update($idUser, $dataLengkapi);
-
             session()->set('nama', $dataLengkapi['nama_lengkap']);
 
             return redirect()->to('siswa/dashboard')->with('success', 'Profil berhasil dilengkapi!');
         }
 
-        $rules = [
-            'username' => [
-                'rules' => "required|min_length[4]|is_unique[users.username,idUser,{$idUser}]",
-                'errors' => [
-                    'required' => 'Username wajib diisi.',
-                    'min_length' => 'Username minimal 4 karakter.',
-                    'is_unique' => 'Username tersebut sudah dipakai siswa lain.'
+        // EDIT PROFIL BIASA
+        else {
+            $rules = [
+                'username' => [
+                    'rules' => "required|min_length[4]|is_unique[users.username,idUser,{$idUser}]",
+                    'errors' => [
+                        'required' => 'Username wajib diisi.',
+                        'min_length' => 'Username minimal 4 karakter.',
+                        'is_unique' => 'Username tersebut sudah dipakai siswa lain.'
+                    ]
+                ],
+                'password_lama' => [
+                    'rules' => 'required',
+                    'errors' => [
+                        'required' => 'Password lama wajib diisi untuk verifikasi keamanan.'
+                    ]
+                ],
+                'password_baru' => [
+                    'rules' => 'permit_empty|min_length[8]',
+                    'errors' => [
+                        'min_length' => 'Password baru minimal 8 karakter.'
+                    ]
                 ]
-            ],
-            'password_lama' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Password lama wajib diisi untuk memverifikasi identitas Anda.'
-                ]
-            ],
-            'password_baru' => [
-                'rules' => 'permit_empty|min_length[8]',
-                'errors' => [
-                    'min_length' => 'Password baru minimal 8 karakter.'
-                ]
-            ]
-        ];
+            ];
 
-        if (!$this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            if (!$this->validate($rules)) {
+                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            }
+
+            // Verifikasi Password Lama
+            $passwordLamaInput = (string) $this->request->getPost('password_lama');
+            if (!password_verify($passwordLamaInput, (string) $userSaatIni['password'])) {
+                return redirect()->back()->withInput()->with('errors', ['password_lama' => 'Verifikasi Gagal, Password lama SALAH']);
+            }
+
+            $dataUpdate = [
+                'username' => (string) $this->request->getPost('username'),
+            ];
+
+            // Jika ganti password baru
+            $passwordBaruInput = (string) $this->request->getPost('password_baru');
+            if (!empty($passwordBaruInput)) {
+                $dataUpdate['password'] = password_hash($passwordBaruInput, PASSWORD_DEFAULT);
+            }
+
+            $userModel->update($idUser, $dataUpdate);
+            session()->set('username', $dataUpdate['username']);
+
+            return redirect()->to('siswa/dashboard')->with('success', 'Profil Anda berhasil diperbarui!');
         }
-
-        $passwordLamaInput = (string) $this->request->getPost('password_lama');
-        $passwordBaruInput = (string) $this->request->getPost('password_baru');
-        $usernameBaru = (string) $this->request->getPost('username');
-
-        if (!password_verify($passwordLamaInput, (string) $userSaatIni['password'])) {
-            return redirect()->back()->withInput()->with('errors', ['password_lama' => 'Verifikasi Gagal, Password lama yang Anda masukkan SALAH']);
-        }
-
-        $dataUpdate = [
-            'username' => $usernameBaru,
-        ];
-
-        if (!empty($passwordBaruInput)) {
-            $dataUpdate['password'] = password_hash($passwordBaruInput, PASSWORD_DEFAULT);
-        }
-
-        $userModel->update($idUser, $dataUpdate);
-        session()->set('username', $dataUpdate['username']);
-
-        return redirect()->to('siswa/dashboard')->with('success', 'Profil Anda berhasil diperbarui!');
     }
 }
