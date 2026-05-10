@@ -181,118 +181,125 @@
         </div>
 
         <div class="modal fade" id="editProfileSiswa" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg rounded-4">
-                    <div class="modal-header border-bottom-0 pb-0">
-                        <h5 class="modal-title fw-bold">Perbarui Data Diri</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <form action="<?= base_url('siswa/dashboard/update_profile') ?>" method="post">
-                        <input type="hidden" name="from_popup" value="1">
+            <form action="<?= base_url('siswa/dashboard/update_profile') ?>" method="post">
+                <input type="hidden" name="nama_lengkap" value="<?= esc((string) ($user['nama_lengkap'] ?? '')) ?>">
+                <input type="hidden" name="kelas" value="<?= esc((string) ($user['kelas'] ?? '')) ?>">
+                <input type="hidden" name="no_absen" value="<?= esc((string) ($user['no_absen'] ?? '')) ?>">
+                <input type="hidden" name="from_popup" value="1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-4">
+                        <div class="modal-header border-bottom-0 pb-0">
+                            <h5 class="modal-title fw-bold">Perbarui Data Diri</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form action="<?= base_url('siswa/dashboard/update_profile') ?>" method="post">
+                            <input type="hidden" name="from_popup" value="1">
 
-                        <div class="modal-body p-4">
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary">Nama Lengkap</label>
-                                <input type="text" class="form-control bg-light text-muted"
-                                    value="<?= esc((string) ($user['nama_lengkap'] ?? '')) ?>" readonly
-                                    style="cursor: not-allowed;">
-                                <div class="form-text text-danger" style="font-size: 0.7rem;">Nama Lengkap tidak dapat
-                                    diubah secara mandiri.
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                    <label class="form-label small fw-bold text-secondary">Kelas</label>
+                            <div class="modal-body p-4">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Nama Lengkap</label>
                                     <input type="text" class="form-control bg-light text-muted"
-                                        value="<?= esc((string) ($user['kelas'] ?? '-')) ?>" readonly
+                                        value="<?= esc((string) ($user['nama_lengkap'] ?? '')) ?>" readonly
                                         style="cursor: not-allowed;">
-                                    <div class="form-text text-danger" style="font-size: 0.7rem;">Kelas tidak dapat diubah.
+                                    <div class="form-text text-danger" style="font-size: 0.7rem;">Nama Lengkap tidak dapat
+                                        diubah secara mandiri.
                                     </div>
                                 </div>
-                                <div class="col-6 mb-3">
-                                    <label class="form-label small fw-bold text-secondary">No. Absen</label>
-                                    <input type="text" class="form-control bg-light text-muted"
-                                        value="<?= esc((string) ($user['no_absen'] ?? '-')) ?>" readonly
-                                        style="cursor: not-allowed;">
-                                    <div class="form-text text-danger" style="font-size: 0.7rem;">No Absen tidak dapat
-                                        diubah.</div>
+
+                                <div class="row">
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label small fw-bold text-secondary">Kelas</label>
+                                        <input type="text" class="form-control bg-light text-muted"
+                                            value="<?= esc((string) ($user['kelas'] ?? '-')) ?>" readonly
+                                            style="cursor: not-allowed;">
+                                        <div class="form-text text-danger" style="font-size: 0.7rem;">Kelas tidak dapat
+                                            diubah.
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label class="form-label small fw-bold text-secondary">No. Absen</label>
+                                        <input type="text" class="form-control bg-light text-muted"
+                                            value="<?= esc((string) ($user['no_absen'] ?? '-')) ?>" readonly
+                                            style="cursor: not-allowed;">
+                                        <div class="form-text text-danger" style="font-size: 0.7rem;">No Absen tidak dapat
+                                            diubah.</div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light"><i
+                                                class="fa-regular fa-envelope text-secondary"></i></span>
+                                        <input type="email" class="form-control bg-light text-muted"
+                                            value="<?= esc((string) ($user['email'] ?? '')) ?>" readonly
+                                            style="cursor: not-allowed;">
+                                    </div>
+                                    <div class="form-text text-danger" style="font-size: 0.7rem;">Email tidak dapat diubah.
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label small fw-bold text-secondary">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i
+                                                class="fa-regular fa-user text-primary"></i></span>
+                                        <input type="text" name="username" class="form-control border-start-0"
+                                            value="<?= esc((string) ($user['username'] ?? '')) ?>" required minlength="4">
+                                    </div>
+                                    <div class="form-text text-muted" style="font-size: 0.7rem;">Anda dapat mengganti
+                                        Username
+                                        (minimal 4 karakter).
+                                    </div>
+                                </div>
+
+                                <hr class="my-4 border-secondary opacity-25">
+                                <h6 class="fw-bold mb-3 text-dark">Verifikasi Keamanan
+                                </h6>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Password Lama <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0 border-danger"><i
+                                                class="fa-solid fa-lock text-danger"></i></span>
+                                        <input type="password" name="password" id="passwordLama"
+                                            class="form-control border-start-0 border-end-0 border-danger bg-opacity-10"
+                                            placeholder="Masukkan password saat ini" required>
+                                        <span class="input-group-text bg-white border-start-0 border-danger"
+                                            style="cursor: pointer;" onclick="togglePassword('passwordLama', 'eyeLama')">
+                                            <i class="fa-solid fa-eye text-secondary" id="eyeLama"></i>
+                                        </span>
+                                    </div>
+                                    <div class="form-text text-danger fw-bold" style="font-size: 0.7rem;">Wajib diisi untuk
+                                        memverifikasi perubahan!</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold text-secondary">Password Baru</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white border-end-0"><i
+                                                class="fa-solid fa-key text-secondary"></i></span>
+                                        <input type="password" name="password_baru" id="passwordBaru"
+                                            class="form-control border-start-0 border-end-0"
+                                            placeholder="Kosongkan jika tidak ingin diubah">
+                                        <span class="input-group-text bg-white border-start-0" style="cursor: pointer;"
+                                            onclick="togglePassword('passwordBaru', 'eyeBaru')">
+                                            <i class="fa-solid fa-eye text-secondary" id="eyeBaru"></i>
+                                        </span>
+                                    </div>
+                                    <div class="form-text text-muted" style="font-size: 0.7rem;">Isi hanya jika Anda ingin
+                                        mengganti password.</div>
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary">Email</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i
-                                            class="fa-regular fa-envelope text-secondary"></i></span>
-                                    <input type="email" class="form-control bg-light text-muted"
-                                        value="<?= esc((string) ($user['email'] ?? '')) ?>" readonly
-                                        style="cursor: not-allowed;">
-                                </div>
-                                <div class="form-text text-danger" style="font-size: 0.7rem;">Email tidak dapat diubah.
-                                </div>
+                            <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold">Simpan
+                                    Perubahan</button>
                             </div>
-
-                            <div class="mb-4">
-                                <label class="form-label small fw-bold text-secondary">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="fa-regular fa-user text-primary"></i></span>
-                                    <input type="text" name="username" class="form-control border-start-0"
-                                        value="<?= esc((string) ($user['username'] ?? '')) ?>" required minlength="4">
-                                </div>
-                                <div class="form-text text-muted" style="font-size: 0.7rem;">Anda dapat mengganti Username
-                                    (minimal 4 karakter).
-                                </div>
-                            </div>
-
-                            <hr class="my-4 border-secondary opacity-25">
-                            <h6 class="fw-bold mb-3 text-dark">Verifikasi Keamanan
-                            </h6>
-
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary">Password Lama <span
-                                        class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0 border-danger"><i
-                                            class="fa-solid fa-lock text-danger"></i></span>
-                                    <input type="password" name="password_lama" id="passwordLama"
-                                        class="form-control border-start-0 border-end-0 border-danger bg-opacity-10"
-                                        placeholder="Masukkan password saat ini" required>
-                                    <span class="input-group-text bg-white border-start-0 border-danger"
-                                        style="cursor: pointer;" onclick="togglePassword('passwordLama', 'eyeLama')">
-                                        <i class="fa-solid fa-eye text-secondary" id="eyeLama"></i>
-                                    </span>
-                                </div>
-                                <div class="form-text text-danger fw-bold" style="font-size: 0.7rem;">Wajib diisi untuk
-                                    memverifikasi perubahan!</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary">Password Baru</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0"><i
-                                            class="fa-solid fa-key text-secondary"></i></span>
-                                    <input type="password" name="password_baru" id="passwordBaru"
-                                        class="form-control border-start-0 border-end-0"
-                                        placeholder="Kosongkan jika tidak ingin diubah">
-                                    <span class="input-group-text bg-white border-start-0" style="cursor: pointer;"
-                                        onclick="togglePassword('passwordBaru', 'eyeBaru')">
-                                        <i class="fa-solid fa-eye text-secondary" id="eyeBaru"></i>
-                                    </span>
-                                </div>
-                                <div class="form-text text-muted" style="font-size: 0.7rem;">Isi hanya jika Anda ingin
-                                    mengganti password.</div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer border-top-0 pt-0 px-4 pb-4">
-                            <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold">Simpan
-                                Perubahan</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
-            </div>
         </div>
 
     <?php endif; ?>
