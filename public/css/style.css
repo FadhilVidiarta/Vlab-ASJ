@@ -1,0 +1,337 @@
+/* === TEMA AREA PUBLIK & FORM LOGIN === */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Variabel Warna Global */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --secondary: #64748b;
+  --dark: #1e293b;
+  --light: #f8fafc;
+  --white: #ffffff;
+  --border: #e2e8f0;
+}
+
+/* Setelan Body Dasar */
+body {
+  font-family: "Poppins", sans-serif;
+  color: var(--secondary);
+  background-color: var(--white);
+  overflow-x: hidden;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--dark);
+  font-weight: 700;
+}
+.text-primary-custom {
+  color: var(--primary);
+}
+.text-dark-custom {
+  color: var(--dark);
+}
+.text-gradient {
+  background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.bg-section-white {
+  background-color: var(--white);
+}
+.bg-section-grey {
+  background-color: var(--light);
+}
+.fill-white {
+  fill: var(--white);
+}
+.fill-grey {
+  fill: var(--light);
+}
+
+/* ========================================= */
+/* === KOMPONEN NAVBAR LANDING PAGE === */
+/* ========================================= */
+.navbar-glass {
+  background-color: transparent;
+  padding: 15px 0;
+  transition:
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.navbar-glass.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.navbar-brand,
+.navbar-brand:hover,
+.navbar-brand i,
+.navbar-brand:hover i {
+  color: var(--primary) !important;
+  text-decoration: none !important;
+  background: none !important;
+}
+.navbar-brand::after {
+  display: none !important;
+}
+.navbar-brand-custom {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+
+/* Animasi Garis Bawah Navigasi */
+.navbar-nav .nav-link {
+  color: var(--secondary);
+  font-weight: 500;
+  position: relative;
+  padding: 5px 0;
+  margin: 0 15px;
+  transition: color 0.3s ease-in-out;
+}
+.navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  bottom: -3px;
+  left: 0;
+  background-color: var(--primary);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.navbar-nav .nav-link:hover,
+.active-link {
+  color: var(--primary) !important;
+}
+.navbar-nav .nav-link:hover::after,
+.active-link::after {
+  transform: scaleX(1);
+}
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: none;
+}
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(37, 99, 235, 1)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* ========================================= */
+/* === KOMPONEN TOMBOL PUBLIK === */
+/* ========================================= */
+.btn-blue {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 10px 25px;
+  border-radius: 50px;
+  font-weight: 600;
+  border: 2px solid var(--primary);
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+.btn-blue:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+.btn-outline-blue {
+  background-color: transparent;
+  color: var(--primary);
+  padding: 10px 25px;
+  border-radius: 50px;
+  font-weight: 600;
+  border: 2px solid var(--border);
+}
+.btn-outline-blue:hover {
+  border-color: var(--primary);
+  background-color: var(--white);
+  color: var(--primary);
+}
+.btn-white {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  transition: all 0.3s ease;
+}
+.btn-white:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* ========================================= */
+/* === KOMPONEN KARTU & DEKORASI PUBLIK === */
+/* ========================================= */
+.card-hover {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  height: 100%;
+}
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary);
+}
+.icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.bg-blue-soft {
+  background-color: #dbeafe;
+  color: var(--primary);
+}
+.bg-purple-soft {
+  background-color: #f3e8ff;
+  color: #7c3aed;
+}
+.bg-orange-soft {
+  background-color: #ffedd5;
+  color: #ea580c;
+}
+.bg-deco-icon {
+  position: absolute;
+  color: #f1f5f9;
+  z-index: 0;
+}
+.footer-custom {
+  background-color: var(--white);
+  border-top: 1px solid var(--border);
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+}
+
+/* Animasi Benda Melayang */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* ========================================= */
+/* === RESPONSIVE NAVBAR PUBLIK (HP) === */
+/* ========================================= */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-shadow: none;
+  }
+  .navbar-nav {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--border);
+  }
+  .active-link::after,
+  .navbar-nav .nav-link::after {
+    display: none !important;
+  }
+  .active-link {
+    background-color: var(--light);
+    border-radius: 8px;
+    padding-left: 15px;
+    color: var(--primary) !important;
+  }
+  .btn-blue,
+  .btn-outline-blue {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .ms-lg-3,
+  .ms-lg-2 {
+    margin-left: 0 !important;
+  }
+}
+
+/* ========================================= */
+/* === FORM AUTH (LOGIN / REGISTER) === */
+/* ========================================= */
+.auth-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background-color: var(--light);
+}
+.auth-card {
+  background: var(--white);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+.form-control {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background-color: #f8fafc;
+  font-size: 0.95rem;
+}
+.form-control:focus {
+  background-color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+.input-group-text {
+  background-color: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Responsive Form Auth (Tablet & HP) */
+@media (max-width: 991.98px) {
+  .auth-card {
+    max-width: 550px;
+  }
+}
+@media (max-width: 576px) {
+  .auth-wrapper {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .auth-card {
+    padding: 2rem 1.5rem;
+    box-shadow: none;
+    border: 1px solid var(--border);
+    width: 100%;
+  }
+}

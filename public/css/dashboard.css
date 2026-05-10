@@ -1,0 +1,440 @@
+/* === TEMA DASHBOARD (GURU & SISWA) === */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* Variabel Warna & Ukuran */
+:root {
+  --primary: #2563eb;
+  --secondary: #64748b;
+  --bg-body: #f1f5f9;
+  --white: #ffffff;
+  --border: #e2e8f0;
+  --sidebar-width: 260px;
+  --text-dark: #1e293b;
+}
+
+/* Pengaturan Body Dasar */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-body);
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+
+/* ========================================= */
+/* === LAYOUT DASHBOARD GURU & SIDEBAR === */
+/* ========================================= */
+
+/* Layout Sidebar Kiri */
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  transform: translateX(0); /* Muncul di layar besar */
+}
+
+/* Header Sidebar & Menu Navigasi */
+.sidebar-brand {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-menu {
+  padding: 1.5rem 1rem;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.nav-link {
+  color: var(--secondary);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+}
+.nav-link i {
+  width: 30px;
+  font-size: 1.1rem;
+}
+.nav-link.active {
+  background-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+.nav-link:hover:not(.active) {
+  background-color: #eff6ff;
+  color: var(--primary);
+}
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Layout Konten Utama Kanan */
+.main-content {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition:
+    margin-left 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* Header Atas & Body Konten */
+.top-header {
+  height: 70px;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+.content-body {
+  padding: 2rem;
+}
+
+/* ========================================= */
+/* === KOMPONEN UI DASHBOARD === */
+/* ========================================= */
+
+/* Desain Tabel Modern */
+.card-modern {
+  background: var(--white);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+.table-modern {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table-modern thead th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.table-modern tbody tr td {
+  padding: 1rem 1.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  color: #334155;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+.table-modern tbody tr:last-child td {
+  border-bottom: none;
+}
+.table-modern tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Avatar Bulat & Badge Status */
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-right: 12px;
+}
+.bg-soft-primary {
+  background: #eff6ff;
+  color: var(--primary);
+}
+.bg-soft-success {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.bg-soft-danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.bg-soft-warning {
+  background: #fffbeb;
+  color: #d97706;
+}
+/* === KOMPONEN UI: STAT CARD (WIDGET ATAS) === */
+.stat-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* TAMBAHKAN 3 BARIS INI UNTUK MENGEMBALIKAN WARNA ICON */
+.bg-blue-soft {
+  background-color: #dbeafe;
+  color: var(--primary);
+}
+.bg-purple-soft {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+.bg-orange-soft {
+  background-color: #ffedd5;
+  color: #ea580c;
+}
+
+/* Form Input Pencarian */
+.search-input {
+  border-radius: 50px;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  padding-left: 20px;
+  transition: 0.3s;
+}
+.search-input:focus {
+  background: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+/* Tombol Pagination Berhalaman */
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 0;
+  gap: 5px;
+  justify-content: flex-end;
+}
+.pagination li a,
+.pagination li span {
+  position: relative;
+  display: block;
+  color: var(--secondary);
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px !important;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.pagination li.active a,
+.pagination li.active span {
+  z-index: 3;
+  color: #fff;
+  background-color: var(--primary);
+  border-color: var(--primary);
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+}
+.pagination li a:hover {
+  z-index: 2;
+  color: var(--primary);
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+/* Kartu Statistik Atas */
+.stat-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* ========================================= */
+/* === RESPONSIVE LOGIC SIDEBAR TOGGLE === */
+/* ========================================= */
+
+/* Layar PC/Laptop (Sidebar Default Muncul, Klik Sembunyi) */
+@media (min-width: 992px) {
+  body.sidebar-toggled .sidebar {
+    transform: translateX(-100%);
+  }
+  body.sidebar-toggled .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Layar Tablet/HP (Sidebar Default Sembunyi, Klik Muncul Penuh) */
+@media (max-width: 991.98px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .main-content {
+    margin-left: 0;
+  }
+
+  /* Saat sidebar terbuka di HP */
+  body.sidebar-toggled .sidebar {
+    transform: translateX(0);
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+  }
+  /* FIX: Mendorong konten layar utuh ke kanan agar tombol Garis Tiga TIDAK HILANG */
+  body.sidebar-toggled .main-content {
+    transform: translateX(260px);
+    overflow: hidden;
+  }
+}
+
+/* ========================================= */
+/* === TEMA KHUSUS DASHBOARD SISWA === */
+/* ========================================= */
+
+/* Navbar Atas Siswa */
+.navbar-student {
+  background-color: #ffffff;
+  height: 80px;
+  border-bottom: 1px solid #f1f5f9;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  padding: 0 1.5rem;
+}
+.navbar-student .navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+.navbar-student .nav-link {
+  color: #64748b;
+  font-weight: 500;
+  padding: 0.6rem 1.5rem !important;
+  transition: 0.3s;
+  border-radius: 50px;
+  margin: 0 5px;
+}
+.navbar-student .nav-link:hover,
+.navbar-student .nav-link.active {
+  color: var(--primary);
+  background-color: #eff6ff;
+}
+
+/* FIX: Sembunyikan icon server di menu praktikum secara paksa melalui CSS */
+.navbar-student .nav-link i.fa-server {
+  display: none !important;
+}
+
+/* Tombol Profil Kanan Siswa */
+.profile-pill {
+  padding: 5px 5px 5px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.3s;
+  cursor: pointer;
+  background: #fff;
+}
+.profile-pill:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  border-color: var(--primary);
+}
+
+/* FIX: Pastikan nama siswa tetap muncul di layar HP (Mengakali d-none bawaan bootstrap) */
+.navbar-student .profile-pill span.d-none {
+  display: block !important;
+}
+
+/* Banner Biru Utama & Kartu Materi */
+.student-banner {
+  background: linear-gradient(120deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  border-radius: 20px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+}
+.card-course {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  transition: 0.3s;
+  overflow: hidden;
+  height: 100%;
+  position: relative;
+  top: 0;
+}
+.card-course:hover {
+  top: -5px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+  border-color: var(--primary);
+}
+.course-img-box {
+  height: 120px;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  font-size: 3rem;
+}
+
+/* Responsive Dropdown Navbar Siswa (Layar HP) */
+@media (max-width: 991.98px) {
+  .navbar-student .navbar-collapse {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 75px;
+    left: 1rem;
+    right: 1rem;
+    z-index: 1050;
+    border: 1px solid var(--border);
+  }
+  .navbar-student .nav-link {
+    margin: 5px 0;
+  }
+  .profile-pill {
+    margin-top: 15px;
+    justify-content: space-between;
+  }
+}
