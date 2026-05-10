@@ -29,7 +29,6 @@
         display: none !important;
     }
 
-    /* 2. MEMBUAT TAMPILAN FULL SCREEN PENUH */
     .vlab-wrapper {
         position: fixed;
         top: 0;
@@ -42,7 +41,6 @@
         flex-direction: column;
     }
 
-    /* 3. HEADER V-LAB */
     .vlab-header {
         height: auto;
         min-height: 60px;
@@ -55,7 +53,6 @@
         flex-shrink: 0;
     }
 
-    /* 4. AREA SPLIT SCREEN */
     .vlab-body {
         display: flex;
         flex-grow: 1;
@@ -63,7 +60,7 @@
     }
 
     .panel-kiri {
-        width: 40%;
+        width: 50%;
         background-color: #f8f9fa;
         height: 100%;
         display: flex;
@@ -75,7 +72,7 @@
         background-color: #000000;
         height: 100%;
         position: relative;
-        padding: 10px;
+        padding: 5px;
     }
 
     .resizer {
@@ -162,7 +159,6 @@
 </div>
 
 <script>
-    // === 1. LOGIKA RESIZER PANEL (Sesuai Desain Lama) ===
     document.addEventListener('DOMContentLoaded', function () {
         const resizer = document.getElementById('dragMe');
         const kiri = document.getElementById('panelKiri');
@@ -197,7 +193,6 @@
         });
     });
 
-    // === 2. LOGIKA TERMINAL PROXMOX (Xterm.js) ===
     const vmid = '<?= esc((string) ($vmid ?? '')) ?>';
     const node = '<?= esc((string) ($node_name ?? 'vlab')) ?>';
     const ticket = encodeURIComponent('<?= esc((string) ($ticket ?? '')) ?>');
@@ -226,10 +221,13 @@
         socket.binaryType = 'arraybuffer';
 
         socket.onopen = () => {
-            // Handshake Wajib
             socket.send(apiUser + ':' + decodeURIComponent(ticket) + '\n');
 
-            // PING ANTI-MATI: Kirim sinyal '2' ke Proxmox setiap 20 detik agar Apache tidak Timeout
+            fitAddon.fit();
+            setTimeout(() => {
+                socket.send('1:' + term.cols + ':' + term.rows + ':');
+            }, 500);
+
             pingInterval = setInterval(() => {
                 if (socket.readyState === window.WebSocket.OPEN) {
                     socket.send("2");
@@ -255,7 +253,6 @@
             term.writeln('\r\n\x1b[31m[!] Error Jaringan Terdeteksi.\x1b[0m');
         };
 
-        // Format Ketikan Wajib Proxmox (0:length:huruf)
         term.onData(data => {
             if (socket.readyState === window.WebSocket.OPEN) {
                 const byteLength = new window.TextEncoder().encode(data).length;
@@ -263,7 +260,6 @@
             }
         });
 
-        // Format Resize Layar Wajib Proxmox (1:cols:rows:)
         term.onResize(size => {
             if (socket.readyState === window.WebSocket.OPEN) {
                 socket.send('1:' + size.cols + ':' + size.rows + ':');
