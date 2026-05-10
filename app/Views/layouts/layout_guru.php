@@ -54,7 +54,8 @@
     <div class="main-content">
         <div class="top-header">
             <div class="d-flex align-items-center">
-                <button class="btn btn-light me-3 border text-secondary shadow-sm" id="btnToggleSidebar">
+                <button type="button" class="btn btn-light me-3 border text-secondary shadow-sm" id="btnToggleSidebar"
+                    style="position: relative; z-index: 9999;">
                     <i class="fa-solid fa-bars fs-5"></i>
                 </button>
                 <h5 class="fw-bold mb-0 text-dark"><?= $title ?? 'Dashboard' ?></h5>
@@ -277,40 +278,19 @@
             });
         <?php endif; ?>
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const btnToggle = document.getElementById('btnToggleSidebar');
-            const body = document.body;
-            const sidebar = document.getElementById('sidebar');
+        const btnToggle = document.getElementById('btnToggleSidebar');
+        const body = document.body;
 
-            // 1. Eksekusi klik tombol
-            if (btnToggle) {
-                btnToggle.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    e.stopPropagation(); a
-                    body.classList.toggle('sidebar-toggled');
-                });
+        if (btnToggle) {
+            btnToggle.addEventListener('click', () => {
+                body.classList.toggle('toggle-sidebar');
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 992) {
+                body.classList.remove('toggle-sidebar');
             }
-
-            document.addEventListener('click', function (event) {
-                if (window.innerWidth < 992) {
-                    const isClickInsideSidebar = sidebar.contains(event.target);
-                    const isClickOnToggleBtn = btnToggle.contains(event.target);
-
-                    if (!isClickInsideSidebar && !isClickOnToggleBtn && body.classList.contains('sidebar-toggled')) {
-                        body.classList.remove('sidebar-toggled');
-                    }
-                }
-            });
-
-            let lastWidth = window.innerWidth;
-            window.addEventListener('resize', () => {
-                if (window.innerWidth !== lastWidth) {
-                    if (window.innerWidth >= 992) {
-                        body.classList.remove('sidebar-toggled');
-                    }
-                    lastWidth = window.innerWidth;
-                }
-            });
         });
 
         function togglePassword(inputId, iconId) {

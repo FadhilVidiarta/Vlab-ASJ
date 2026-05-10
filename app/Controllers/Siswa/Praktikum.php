@@ -13,7 +13,6 @@ class Praktikum extends BaseController
 
     public function __construct()
     {
-        // Hardcode nama node secara langsung
         $this->node_name = 'vlab';
     }
 
