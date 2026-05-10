@@ -193,7 +193,6 @@
                     <h5 class="modal-title fw-bold">Lengkapi Profil Anda</h5>
                 </div>
                 <form action="<?= base_url('siswa/dashboard/update_profile') ?>" method="post">
-                    <?= csrf_field() ?>
                     <input type="hidden" name="from_popup" value="1">
                     <div class="modal-body p-4">
                         <div class="alert alert-light border small mb-3 text-dark">

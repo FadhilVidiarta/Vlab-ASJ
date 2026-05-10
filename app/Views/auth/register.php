@@ -39,7 +39,6 @@
             <?php endif; ?>
 
             <form action="<?= base_url('auth/process_register') ?>" method="post">
-                <?= csrf_field() ?>
                 <div class="mb-3">
                     <label class="form-label fw-bold text-secondary small">NAMA LENGKAP</label>
                     <div class="input-group">

@@ -34,7 +34,6 @@
 
             <?php if (isset($token)): ?>
                 <form action="<?= base_url('auth/process_reset') ?>" method="post">
-                    <?= csrf_field() ?>
                     <input type="hidden" name="token" value="<?= $token ?>">
 
                     <div class="mb-3">
@@ -62,7 +61,6 @@
 
             <?php else: ?>
                 <form action="<?= base_url('auth/process_forgot') ?>" method="post">
-                    <?= csrf_field() ?>
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-secondary">EMAIL TERDAFTAR</label>
                         <div class="input-group">

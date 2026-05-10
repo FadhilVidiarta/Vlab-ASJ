@@ -106,7 +106,6 @@
 
     <!-- REVISI: Mengubah $ujian['id'] menjadi $ujian['idUjian'] -->
     <form id="formUjian" action="<?= base_url('siswa/ujian/submit/' . (string) $ujian['idUjian']) ?>" method="post">
-        <?= csrf_field() ?>
         <?php $no = 1;
         foreach ($soal as $s): ?>
             <div class="card border border-light-subtle shadow-sm rounded-4 mb-4 question-card">

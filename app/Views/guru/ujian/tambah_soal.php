@@ -39,7 +39,6 @@
     <!-- REVISI: Ubah $ujian['id'] menjadi $ujian['idUjian'] -->
     <form action="<?= base_url('guru/ujian/simpan_soal/' . (string) $ujian['idUjian']) ?>" method="post"
         enctype="multipart/form-data">
-        <?= csrf_field() ?>
 
         <div class="mb-4">
             <label class="form-label fw-bold text-dark">Pertanyaan <span class="text-danger">*</span></label>

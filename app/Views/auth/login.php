@@ -34,7 +34,6 @@
             <?php endif; ?>
 
             <form action="<?= base_url('auth/process_login') ?>" method="post">
-                <?= csrf_field() ?>
                 <div class="mb-3">
                     <label class="form-label fw-bold text-secondary small">USERNAME / EMAIL</label>
                     <div class="input-group">

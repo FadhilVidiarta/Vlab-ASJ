@@ -41,7 +41,6 @@
     <form
         action="<?= base_url('guru/ujian/update_soal/' . (string) $soal['idSoal'] . '/' . (string) $ujian['idUjian']) ?>"
         method="post" enctype="multipart/form-data">
-        <?= csrf_field() ?>
 
         <div class="mb-4">
             <label class="form-label fw-bold text-dark">Pertanyaan <span class="text-danger">*</span></label>

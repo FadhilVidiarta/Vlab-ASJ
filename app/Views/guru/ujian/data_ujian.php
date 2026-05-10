@@ -102,7 +102,6 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <form action="<?= base_url('guru/ujian/update/' . $u['idUjian']) ?>" method="post">
-                                        <?= csrf_field() ?>
                                         <div class="modal-body p-4">
                                             <div class="mb-3">
                                                 <label class="form-label small fw-bold text-secondary">Judul Tes / Kuis</label>
