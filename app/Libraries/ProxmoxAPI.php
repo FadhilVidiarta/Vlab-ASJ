@@ -11,11 +11,11 @@ class ProxmoxAPI
 
     public function __construct()
     {
-        // Mengambil data kredensial dengan aman dari file .env
-        $this->hostname = env('PROXMOX_HOST', '127.0.0.1');
-        $this->port = (int) env('PROXMOX_PORT', 8006);
-        $this->tokenId = env('PROXMOX_TOKEN_ID', '');
-        $this->tokenSecret = env('PROXMOX_TOKEN_SECRET', '');
+        // Hardcode langsung tanpa memanggil file .env
+        $this->hostname = '103.160.213.137';
+        $this->port = 8006;
+        $this->tokenId = 'root@pam!vlabci4';
+        $this->tokenSecret = 'dfc2601e-506a-40ae-a96d-701bbf1bb700';
     }
 
     /**
@@ -44,8 +44,9 @@ class ProxmoxAPI
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_CONNECTTIMEOUT => 2,
-            CURLOPT_TIMEOUT => 3
+            // Timeout dinaikkan sedikit agar saat clone OS tidak gagal/terputus di tengah jalan
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 30
         ];
 
         if ($method === 'POST' || $method === 'PUT') {

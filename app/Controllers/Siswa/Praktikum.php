@@ -13,7 +13,8 @@ class Praktikum extends BaseController
 
     public function __construct()
     {
-        $this->node_name = env('PROXMOX_NODE', 'vlab');
+        // Hardcode nama node secara langsung
+        $this->node_name = 'vlab';
     }
 
     public function index()
@@ -85,7 +86,6 @@ class Praktikum extends BaseController
             $new_vmid = $new_vmid_resp['data'];
 
             // Eksekusi Perintah CLONE (DENGAN FULL CLONE)
-
             $clone_resp = $api->request("/nodes/{$this->node_name}/lxc/{$template_vmid}/clone", "POST", [
                 'newid' => $new_vmid,
                 'hostname' => 'siswa-' . $idUser . '-' . $os_name,
