@@ -278,17 +278,34 @@
             });
         <?php endif; ?>
 
-        const btnToggle = document.querySelector('.btn-light.me-3');
-        const body = document.body;
+        document.addEventListener("DOMContentLoaded", function () {
+            const btnToggle = document.querySelector('.btn-light.me-3');
+            const body = document.body;
+            const sidebar = document.getElementById('sidebar');
 
-        if (btnToggle) {
-            btnToggle.addEventListener('click', () => {
-                body.classList.toggle('sidebar-toggled');
+            if (btnToggle) {
+                btnToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    body.classList.toggle('sidebar-toggled');
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                if (window.innerWidth < 992) {
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggleBtn = btnToggle.contains(event.target);
+
+                    if (!isClickInsideSidebar && !isClickOnToggleBtn && body.classList.contains('sidebar-toggled')) {
+                        body.classList.remove('sidebar-toggled');
+                    }
+                }
             });
-        }
 
-        window.addEventListener('resize', () => {
-            body.classList.remove('sidebar-toggled');
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 992) {
+                    body.classList.remove('sidebar-toggled');
+                }
+            });
         });
 
         function togglePassword(inputId, iconId) {
