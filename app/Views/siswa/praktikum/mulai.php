@@ -188,7 +188,7 @@
 
         // WebSocket langsung mengarah ke Domain Cloudflare Proxmox
         const wsProtocol = 'wss://';
-        const wsHost = 'proxmox.vlabasj.biz.id:8006';
+        const wsHost = 'vps.vlabasj.biz.id:8006';
         const wsUrl = `${wsProtocol}${wsHost}/api2/json/nodes/${node}/lxc/${vmid}/vncwebsocket?port=${port}&vncticket=${ticket}`;
 
         const socket = new window.WebSocket(wsUrl);
