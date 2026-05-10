@@ -170,8 +170,8 @@
                     </div>
 
                     <form action="<?= base_url('guru/dashboard/update_profile') ?>" method="post">
+                        <?= csrf_field() ?>
                         <div class="modal-body p-4">
-
                             <?php if (session()->getFlashdata('errors')): ?>
                                 <div class="alert alert-danger border-0 shadow-sm rounded-3 mb-4">
                                     <div class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-1"></i> Gagal

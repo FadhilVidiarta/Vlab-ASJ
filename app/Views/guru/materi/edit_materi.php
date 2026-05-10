@@ -36,7 +36,7 @@
 
     <form action="<?= base_url('guru/materi/update/' . (string) $materi['idMateri']) ?>" method="post"
         enctype="multipart/form-data">
-
+        <?= csrf_field() ?>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold text-secondary small">Judul Materi Utama</label>
