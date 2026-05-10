@@ -187,8 +187,8 @@
         term.writeln('\x1b[32m[*] Menghubungkan ke server praktikum V-Lab...\x1b[0m');
 
         // WebSocket langsung mengarah ke Domain Cloudflare Proxmox
-        const wsProtocol = 'wss://';
-        const wsHost = 'vps.vlabasj.biz.id:8006';
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsHost = window.location.host;
         const wsUrl = `${wsProtocol}${wsHost}/api2/json/nodes/${node}/lxc/${vmid}/vncwebsocket?port=${port}&vncticket=${ticket}`;
 
         const socket = new window.WebSocket(wsUrl);
