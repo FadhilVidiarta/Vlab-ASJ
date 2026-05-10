@@ -13,7 +13,7 @@ class Praktikum extends BaseController
 
     public function __construct()
     {
-        // Memanggil nama Node dari .env. Jika di .env kosong, otomatis pakai 'vlab'
+        // Memanggil nama Node dari .env. Jika kosong, default pakai 'vlab'
         $this->node_name = env('PROXMOX_NODE', 'vlab');
     }
 
@@ -74,29 +74,43 @@ class Praktikum extends BaseController
         if ($sesi_aktif) {
             $vmid_final = $sesi_aktif['vmid'];
             $os_final = $sesi_aktif['nama_os'];
+            // Pastikan mesin menyala
             $api->request("/nodes/{$this->node_name}/lxc/{$vmid_final}/status/start", "POST");
         } else {
             $template_map = ['debian' => 102, 'ubuntu' => 101, 'centos' => 103];
             $template_vmid = $template_map[strtolower($os_name)] ?? 102;
 
-            $new_vmid = $api->request('/cluster/nextid')['data'];
+            $new_vmid_resp = $api->request('/cluster/nextid');
+            if (empty($new_vmid_resp['data'])) {
+                return redirect()->to('siswa/praktikum')->with('error', 'Gagal mendapatkan ID baru dari server V-Lab.');
+            }
+            $new_vmid = $new_vmid_resp['data'];
+
+            // 1. Eksekusi Perintah CLONE
             $api->request("/nodes/{$this->node_name}/lxc/{$template_vmid}/clone", "POST", [
                 'newid' => $new_vmid,
                 'hostname' => 'siswa-' . $idUser . '-' . $os_name
             ]);
-            sleep(5);
+
+            // REVISI KRITIKAL: Tunggu 15 Detik agar Proxmox selesai membuat file konfigurasi mesin.
+            sleep(15);
+
+            // 2. Eksekusi Perintah START
             $api->request("/nodes/{$this->node_name}/lxc/{$new_vmid}/status/start", "POST");
 
             $vmid_final = $new_vmid;
             $os_final = $os_name;
 
+            // Catat ke database sementara mesin sedang booting
             $builder->where('idUser', $idUser)->update([
                 'vmid' => $vmid_final,
                 'nama_os' => $os_final
             ]);
         }
 
-        sleep(2);
+        // REVISI KRITIKAL 2: Tunggu 4 detik agar OS di dalam Proxmox benar-benar menyala sebelum terminal dibuka
+        sleep(4);
+
         $termData = $api->request("/nodes/{$this->node_name}/lxc/{$vmid_final}/termproxy", "POST");
         $ticket = $termData['data']['ticket'] ?? '';
         $port = $termData['data']['port'] ?? '';
@@ -143,10 +157,10 @@ class Praktikum extends BaseController
             try {
                 $api = new ProxmoxAPI();
                 $api->request("/nodes/{$this->node_name}/lxc/{$vmid}/status/stop", "POST");
-                sleep(3);
+                sleep(4); // Tunggu mesin mati sempurna
                 $api->request("/nodes/{$this->node_name}/lxc/{$vmid}", "DELETE");
             } catch (\Exception $e) {
-                // Silakan isi log error jika diperlukan
+                // Abaikan error Proxmox agar tidak menghalangi web
             }
 
             $db->table('vlab_ct')->where('idUser', $idUser)->where('vmid', $vmid)->update([
@@ -162,7 +176,6 @@ class Praktikum extends BaseController
     public function akhiri_sesi(string $vmid)
     {
         $api = new ProxmoxAPI();
-        // Menggunakan $this->node_name agar dinamis, bukan hardcode 'vlab'
         $api->request("/nodes/{$this->node_name}/lxc/{$vmid}/status/stop", "POST");
         return redirect()->to('siswa/praktikum')->with('success', 'Terminal ditutup. OS telah dimatikan sementara.');
     }
@@ -178,9 +191,10 @@ class Praktikum extends BaseController
         }
 
         $api = new ProxmoxAPI();
-        // Menggunakan $this->node_name
         $api->request("/nodes/{$this->node_name}/lxc/{$sesi['vmid']}/status/start", "POST");
-        sleep(2);
+
+        // Tunggu mesin booting sebelum ambil tiket
+        sleep(4);
 
         $termData = $api->request("/nodes/{$this->node_name}/lxc/{$sesi['vmid']}/termproxy", "POST");
         $ticket = $termData['data']['ticket'] ?? '';
@@ -217,7 +231,6 @@ class Praktikum extends BaseController
             $db->table('vlab_ct')->where('idVlabCT', $id_log)->delete();
             return redirect()->to('siswa/praktikum')->with('success', 'Riwayat pengerjaan berhasil dihapus.');
         }
-
         return redirect()->to('siswa/praktikum')->with('error', 'Data riwayat tidak ditemukan.');
     }
 
