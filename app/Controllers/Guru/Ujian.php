@@ -54,7 +54,7 @@ class Ujian extends BaseController
             'judul_ujian' => $this->request->getPost('judul_ujian'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'durasi_menit' => $this->request->getPost('durasi_menit'),
-            'status' => $this->request->getPost('status')
+            'status' => $this->request->getPost('status') ?? 'tidak aktif'
         ]);
 
         return redirect()->to('guru/ujian')->with('success', 'Tes Sumatif baru berhasil dibuat! Silakan tambahkan soal.');
@@ -147,7 +147,7 @@ class Ujian extends BaseController
             'judul_ujian' => $this->request->getPost('judul_ujian'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'durasi_menit' => $this->request->getPost('durasi_menit'),
-            'status' => $this->request->getPost('status')
+            'status' => $this->request->getPost('status') ?? 'tidak aktif'
         ]);
 
         return redirect()->to('guru/ujian')->with('success', 'Pengaturan Tes berhasil diperbarui!');
