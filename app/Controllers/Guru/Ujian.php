@@ -49,12 +49,13 @@ class Ujian extends BaseController
         if (!$this->validate($rules)) {
             return redirect()->back()->with('error', 'Gagal menyimpan. Pastikan judul dan durasi diisi dengan benar.');
         }
+        $status = $this->request->getPost('status') ?: 'tidak aktif';
 
         $this->ujianModel->save([
             'judul_ujian' => $this->request->getPost('judul_ujian'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'durasi_menit' => $this->request->getPost('durasi_menit'),
-            'status' => $this->request->getPost('status') ?? 'tidak aktif'
+            'status' => $status
         ]);
 
         return redirect()->to('guru/ujian')->with('success', 'Tes Sumatif baru berhasil dibuat! Silakan tambahkan soal.');
