@@ -39,7 +39,7 @@ class Dashboard extends BaseController
             ->limit(5)
             ->get()->getResultArray();
 
-        $node_name = 'proxmox1';
+        $node_name = 'vlab';
         $active_vms_realtime = [];
 
         foreach ($vms_from_db as $vm) {
@@ -69,7 +69,7 @@ class Dashboard extends BaseController
                     }
                 }
 
-                if ($real_ip === 'DHCP') {
+                if ($real_ip === 'DHCP' || $real_status === 'stopped') {
                     $res_config = $api->request("/nodes/{$node_name}/lxc/{$vmid}/config");
                     if (!isset($res_config['error']) && isset($res_config['data']['net0'])) {
                         $net0 = $res_config['data']['net0'];
