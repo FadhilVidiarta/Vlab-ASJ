@@ -304,11 +304,11 @@
 
     <?php endif; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
         window.addEventListener('pageshow', function (event) {
             if (event.persisted || (typeof window.performance != "undefined" && window.performance.navigation.type === 2)) {
-                document.body.style.display = "none";
-                window.location.reload();
+                // window.location.reload(); 
             }
         });
 
@@ -316,14 +316,16 @@
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
 
-            if (input.type === "password") {
-                input.type = "text";
-                icon.classList.remove("fa-eye");
-                icon.classList.add("fa-eye-slash");
-            } else {
-                input.type = "password";
-                icon.classList.remove("fa-eye-slash");
-                icon.classList.add("fa-eye");
+            if (input && icon) {
+                if (input.type === "password") {
+                    input.type = "text";
+                    icon.classList.remove("fa-eye");
+                    icon.classList.add("fa-eye-slash");
+                } else {
+                    input.type = "password";
+                    icon.classList.remove("fa-eye-slash");
+                    icon.classList.add("fa-eye");
+                }
             }
         }
     </script>
