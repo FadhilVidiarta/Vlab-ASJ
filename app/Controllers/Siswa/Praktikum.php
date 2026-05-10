@@ -13,7 +13,6 @@ class Praktikum extends BaseController
 
     public function __construct()
     {
-        // Memanggil nama Node dari .env. Jika kosong, default pakai 'vlab'
         $this->node_name = env('PROXMOX_NODE', 'vlab');
     }
 
@@ -74,7 +73,6 @@ class Praktikum extends BaseController
         if ($sesi_aktif) {
             $vmid_final = $sesi_aktif['vmid'];
             $os_final = $sesi_aktif['nama_os'];
-            // Pastikan mesin menyala
             $api->request("/nodes/{$this->node_name}/lxc/{$vmid_final}/status/start", "POST");
         } else {
             $template_map = ['debian' => 102, 'ubuntu' => 101, 'centos' => 103];
@@ -86,29 +84,30 @@ class Praktikum extends BaseController
             }
             $new_vmid = $new_vmid_resp['data'];
 
-            // 1. Eksekusi Perintah CLONE
-            $api->request("/nodes/{$this->node_name}/lxc/{$template_vmid}/clone", "POST", [
+            // Eksekusi Perintah CLONE (DENGAN FULL CLONE)
+
+            $clone_resp = $api->request("/nodes/{$this->node_name}/lxc/{$template_vmid}/clone", "POST", [
                 'newid' => $new_vmid,
-                'hostname' => 'siswa-' . $idUser . '-' . $os_name
+                'hostname' => 'siswa-' . $idUser . '-' . $os_name,
+                'full' => 1
             ]);
 
-            // REVISI KRITIKAL: Tunggu 15 Detik agar Proxmox selesai membuat file konfigurasi mesin.
+            if (empty($clone_resp['data'])) {
+                return redirect()->to('siswa/praktikum')->with('error', 'Proxmox menolak Clone. Cek penyimpanan VPS Anda.');
+            }
             sleep(15);
 
-            // 2. Eksekusi Perintah START
             $api->request("/nodes/{$this->node_name}/lxc/{$new_vmid}/status/start", "POST");
 
             $vmid_final = $new_vmid;
             $os_final = $os_name;
 
-            // Catat ke database sementara mesin sedang booting
             $builder->where('idUser', $idUser)->update([
                 'vmid' => $vmid_final,
                 'nama_os' => $os_final
             ]);
         }
 
-        // REVISI KRITIKAL 2: Tunggu 4 detik agar OS di dalam Proxmox benar-benar menyala sebelum terminal dibuka
         sleep(4);
 
         $termData = $api->request("/nodes/{$this->node_name}/lxc/{$vmid_final}/termproxy", "POST");
@@ -157,10 +156,10 @@ class Praktikum extends BaseController
             try {
                 $api = new ProxmoxAPI();
                 $api->request("/nodes/{$this->node_name}/lxc/{$vmid}/status/stop", "POST");
-                sleep(4); // Tunggu mesin mati sempurna
+                sleep(4);
                 $api->request("/nodes/{$this->node_name}/lxc/{$vmid}", "DELETE");
             } catch (\Exception $e) {
-                // Abaikan error Proxmox agar tidak menghalangi web
+
             }
 
             $db->table('vlab_ct')->where('idUser', $idUser)->where('vmid', $vmid)->update([
@@ -193,7 +192,6 @@ class Praktikum extends BaseController
         $api = new ProxmoxAPI();
         $api->request("/nodes/{$this->node_name}/lxc/{$sesi['vmid']}/status/start", "POST");
 
-        // Tunggu mesin booting sebelum ambil tiket
         sleep(4);
 
         $termData = $api->request("/nodes/{$this->node_name}/lxc/{$sesi['vmid']}/termproxy", "POST");
