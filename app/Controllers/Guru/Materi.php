@@ -87,7 +87,7 @@ class Materi extends BaseController
             'sub_materi' => $this->request->getPost('sub_materi'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'file_pdf' => $namaFilePdf,
-            'status' => $this->request->getPost('status')
+            'status' => $this->request->getPost('status') ?? 'tidak aktif'
         ]);
 
         return redirect()->to('guru/materi')->with('success', 'Materi dan file PDF berhasil ditambahkan!');
@@ -159,12 +159,13 @@ class Materi extends BaseController
         $filePdf = $this->request->getFile('file_pdf');
 
         if ($filePdf->getError() != 4) {
-            if ($materiLama['file_pdf'] && file_exists('uploads/materi/' . $materiLama['file_pdf'])) {
-                unlink('uploads/materi/' . $materiLama['file_pdf']);
+            $pathLama = FCPATH . 'uploads/materi/' . $materiLama['file_pdf'];
+            if ($materiLama['file_pdf'] && file_exists($pathLama)) {
+                unlink($pathLama);
             }
 
             $namaFilePdf = $filePdf->getRandomName();
-            $filePdf->move('uploads/materi', $namaFilePdf);
+            $filePdf->move(FCPATH . 'uploads/materi', $namaFilePdf);
         }
 
         $this->materiModel->update($id, [
