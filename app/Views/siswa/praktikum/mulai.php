@@ -19,7 +19,6 @@
 <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
 
 <style>
-    /* 1. MENGHILANGKAN SEMUA ELEMEN BAWAAN LAYOUT */
     header,
     nav,
     footer,
@@ -29,7 +28,6 @@
         display: none !important;
     }
 
-    /* 2. MEMBUAT TAMPILAN FULL SCREEN PENUH */
     .vlab-wrapper {
         position: fixed;
         top: 0;
@@ -42,7 +40,6 @@
         flex-direction: column;
     }
 
-    /* 3. HEADER V-LAB */
     .vlab-header {
         height: auto;
         min-height: 60px;
@@ -55,14 +52,12 @@
         flex-shrink: 0;
     }
 
-    /* 4. AREA SPLIT SCREEN (Bisa Digeser) */
     .vlab-body {
         display: flex;
         flex-grow: 1;
         overflow: hidden;
     }
 
-    /* Panel Kiri (PDF) */
     .panel-kiri {
         width: 40%;
         background-color: #f8f9fa;
@@ -71,17 +66,14 @@
         flex-direction: column;
     }
 
-    /* Panel Kanan (Terminal xterm.js) */
     .panel-kanan {
         flex-grow: 1;
         background-color: #000000;
         height: 100%;
         position: relative;
         padding: 10px;
-        /* Sedikit padding agar teks terminal tidak menempel di tepi */
     }
 
-    /* Garis Pemisah (Resizer) */
     .resizer {
         width: 6px;
         background-color: #dee2e6;
@@ -103,14 +95,12 @@
         font-size: 18px;
     }
 
-    /* Penyesuaian agar terminal xterm memenuhi div */
     #terminal-container {
         width: 100%;
         height: 100%;
         overflow: hidden;
     }
 
-    /* Agar scrollbar terminal berfungsi dengan baik */
     .xterm-viewport {
         overflow-y: auto !important;
     }
@@ -175,16 +165,13 @@
 </div>
 
 <script>
-    // =========================================================
-    // LOGIKA XTERM.JS & WEBSOCKET PROXMOX
-    // =========================================================
+    // XTERM.JS & WEBSOCKET PROXMOX
     const vmid = '<?= $vmid ?>';
     const node = '<?= $node_name ?>';
     const ticket = encodeURIComponent('<?= $ticket ?>');
     const port = '<?= $port ?>';
 
     if (ticket && port) {
-        // Inisialisasi Terminal dengan menambahkan window. agar IDE VS Code tidak error
         const term = new window.Terminal({
             cursorBlink: true,
             theme: { background: '#000000', foreground: '#ffffff' },
@@ -192,42 +179,36 @@
             fontSize: 14
         });
 
-        // Fit Addon agar terminal meregang sesuai ukuran div layar kanan
         const fitAddon = new window.FitAddon.FitAddon();
         term.loadAddon(fitAddon);
 
-        // Tampilkan terminal di dalam div container
         term.open(document.getElementById('terminal-container'));
         fitAddon.fit();
         term.writeln('\x1b[32m[*] Menghubungkan ke server praktikum V-Lab...\x1b[0m');
 
-        // URL WebSocket lewat jalur Reverse Proxy Apache
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-        const wsHost = window.location.host;
+        // WebSocket langsung mengarah ke Domain Cloudflare Proxmox
+        const wsProtocol = 'wss://';
+        const wsHost = 'proxmox.vlabasj.biz.id:8006';
         const wsUrl = `${wsProtocol}${wsHost}/api2/json/nodes/${node}/lxc/${vmid}/vncwebsocket?port=${port}&vncticket=${ticket}`;
 
-        // Menggunakan window.WebSocket
         const socket = new window.WebSocket(wsUrl);
-        socket.binaryType = 'arraybuffer'; // Format data native Proxmox
+        socket.binaryType = 'arraybuffer';
 
         socket.onopen = () => {
             term.clear();
             term.writeln('\x1b[32m[+] Berhasil terhubung. Tekan ENTER untuk memulai terminal.\x1b[0m\r\n');
         };
 
-        // Mengirim input keyboard dari browser ke VPS Proxmox
         term.onData(data => {
             if (socket.readyState === window.WebSocket.OPEN) {
                 socket.send(data);
             }
         });
 
-        // Menerima output dari VPS Proxmox ke layar browser
         socket.onmessage = event => {
             if (typeof event.data === 'string') {
                 term.write(event.data);
             } else {
-                // Mengkonversi ArrayBuffer menjadi string menggunakan bawaan window browser
                 const data = new window.Uint8Array(event.data);
                 const decoder = new window.TextDecoder('utf-8');
                 term.write(decoder.decode(data));
@@ -242,16 +223,11 @@
             term.writeln('\r\n\x1b[31m[!] Terjadi kesalahan jaringan pada koneksi WebSocket.\x1b[0m');
         };
 
-        // Menyesuaikan ukuran terminal jika ukuran jendela browser diubah
         window.addEventListener('resize', () => fitAddon.fit());
 
-        // Menyesuaikan ukuran terminal setelah user menggeser resizer panel
         document.addEventListener('mouseup', () => fitAddon.fit());
     }
 
-    // =========================================================
-    // LOGIKA RESIZER (PEMISAH LAYAR KIRI KANAN)
-    // =========================================================
     document.addEventListener('DOMContentLoaded', function () {
         const resizer = document.getElementById('dragMe');
         const kiri = document.getElementById('panelKiri');
@@ -272,10 +248,8 @@
             let posisiMouse = e.clientX;
             let persentaseKiri = (posisiMouse / lebarLayar) * 100;
 
-            // Batasi geseran minimal 20% dan maksimal 80% dari lebar layar
             if (persentaseKiri > 20 && persentaseKiri < 80) {
                 kiri.style.width = persentaseKiri + '%';
-                // Trigger fit addon jika terminal sudah ada, agar teksnya menyesuaikan diri
                 if (typeof fitAddon !== 'undefined') {
                     fitAddon.fit();
                 }
@@ -292,14 +266,9 @@
         });
     });
 
-    // =========================================================
-    // FUNGSI UMUM (AKHIRI SESI & HEARTBEAT)
-    // =========================================================
     function akhiriSesiPraktikum(urlTarget) {
         if (confirm('Akhiri sesi praktikum? Mesin V-Lab Anda akan dimatikan.')) {
-            // Matikan warning onbeforeunload agar langsung direct
             window.onbeforeunload = null;
-            // Hapus iframe PDF (opsional) agar loading lebih ringan saat redirect
             let iframes = document.querySelectorAll('iframe');
             iframes.forEach(iframe => iframe.remove());
 
@@ -307,7 +276,6 @@
         }
     }
 
-    // Heartbeat agar sesi login CodeIgniter tidak expired
     setInterval(function () {
         fetch("<?= base_url('siswa/praktikum/keep_alive') ?>")
             .then(response => response.json())
