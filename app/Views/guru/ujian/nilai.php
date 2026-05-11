@@ -10,7 +10,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="fw-bold mb-0">Kelola Nilai Tes Sumatif</h4>
+        <h4 class="fw-bold mb-0">Nilai Tes Sumatif</h4>
         <p class="text-secondary small mb-0">Pantau hasil evaluasi dan rekap nilai tes seluruh siswa.</p>
     </div>
 </div>
