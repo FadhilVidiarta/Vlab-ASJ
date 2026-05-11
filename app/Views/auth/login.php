@@ -48,7 +48,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-lock text-secondary"></i></span>
                         <input type="password" name="password" id="passwordInput" class="form-control"
-                            placeholder="Password" required>
+                            placeholder="Password" required minlength="8">
                         <span class="input-group-text"><i class="fa-solid fa-eye" id="togglePassword"
                                 style="cursor: pointer;"></i></span>
                     </div>

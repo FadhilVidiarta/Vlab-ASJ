@@ -100,7 +100,7 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-lock text-secondary"></i></span>
                         <input type="password" name="password" id="passReg" class="form-control" 
-                               placeholder="Minimal 8 karakter" required>
+                               placeholder="Minimal 8 karakter" required minlength="8">
                         <span class="input-group-text">
                             <i class="fa-solid fa-eye" id="toggleReg" style="cursor: pointer;"></i>
                         </span>
