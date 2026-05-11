@@ -19,24 +19,24 @@
 <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/lib/xterm-addon-fit.min.js"></script>
 
 <style>
-    /* 1. MENGHILANGKAN SEMUA ELEMEN BAWAAN LAYOUT */
+    /* MENGHILANGKAN SEMUA ELEMEN BAWAAN LAYOUT */
     header, nav, footer, .navbar, .sidebar, #sidebar {
         display: none !important;
     }
 
-    /* 2. MEMBUAT TAMPILAN FULL SCREEN PENUH */
+    /* MEMBUAT TAMPILAN FULL SCREEN PENUH */
     .vlab-wrapper {
         position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
         background-color: #1e1e1e; z-index: 9999; display: flex; flex-direction: column;
     }
 
-    /* 3. HEADER V-LAB */
+    /* HEADER V-LAB */
     .vlab-header {
         height: auto; min-height: 60px; background-color: #ffffff; border-bottom: 1px solid #dee2e6;
         display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; flex-shrink: 0;
     }
 
-    /* 4. AREA SPLIT SCREEN */
+    /* AREA SPLIT SCREEN */
     .vlab-body {
         display: flex; flex-grow: 1; overflow: hidden;
     }
@@ -66,8 +66,6 @@
     .resizer::after {
         content: "⋮"; color: #6c757d; font-size: 18px;
     }
-
-    /* Mencegah baris tombol tertekan (mengecil) */
     .virtual-keys {
         flex-shrink: 0; 
     }
@@ -124,9 +122,9 @@
                 
                 <div class="virtual-keys d-flex gap-2 p-2 bg-dark border-bottom border-secondary overflow-auto" style="white-space: nowrap;">
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('C')">Ctrl+C (Stop)</button>
-                    <button class="btn btn-sm btn-primary py-0" onclick="sendCtrl('S')">Ctrl+S (Save)</button>
-                    <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x0D')">Enter (Nano)</button>
-                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('X')">Ctrl+X (Exit Nano)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('S')">Ctrl+S (Save)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('X')">Ctrl+X (Exit)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x0D')">Enter</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x1B')">ESC</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x09')">TAB</button>
                 </div>

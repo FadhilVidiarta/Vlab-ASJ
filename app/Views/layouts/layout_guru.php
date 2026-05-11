@@ -278,21 +278,42 @@
             });
         <?php endif; ?>
 
-        const btnToggle = document.getElementById('btnToggleSidebar');
-        const body = document.body;
+        // === PERBAIKAN JS RESPONSIVE SIDEBAR ===
+        document.addEventListener("DOMContentLoaded", function () {
+            const btnToggle = document.getElementById('btnToggleSidebar');
+            const body = document.body;
+            const sidebar = document.getElementById('sidebar');
 
-        if (btnToggle) {
-            btnToggle.addEventListener('click', () => {
-                body.classList.toggle('toggle-sidebar');
-            });
-        }
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 992) {
-                body.classList.remove('toggle-sidebar');
+            // 1. Eksekusi klik tombol
+            if (btnToggle) {
+                btnToggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Mencegah bentrok klik
+                    body.classList.toggle('sidebar-toggled'); // NAMA INI SUDAH SINKRON DENGAN CSS
+                });
             }
+
+            // 2. Klik area di luar sidebar otomatis nutup (khusus tampilan HP)
+            document.addEventListener('click', function (event) {
+                if (window.innerWidth < 992 && sidebar) {
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnToggleBtn = btnToggle ? btnToggle.contains(event.target) : false;
+
+                    if (!isClickInsideSidebar && !isClickOnToggleBtn && body.classList.contains('sidebar-toggled')) {
+                        body.classList.remove('sidebar-toggled');
+                    }
+                }
+            });
+
+            // 3. Menghindari reset sembarangan saat resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 992) {
+                    body.classList.remove('sidebar-toggled');
+                }
+            });
         });
 
+        // === FUNGSI LIHAT PASSWORD ===
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);
