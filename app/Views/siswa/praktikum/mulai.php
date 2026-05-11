@@ -20,86 +20,64 @@
 
 <style>
     /* 1. MENGHILANGKAN SEMUA ELEMEN BAWAAN LAYOUT */
-    header,
-    nav,
-    footer,
-    .navbar,
-    .sidebar,
-    #sidebar {
+    header, nav, footer, .navbar, .sidebar, #sidebar {
         display: none !important;
     }
 
+    /* 2. MEMBUAT TAMPILAN FULL SCREEN PENUH */
     .vlab-wrapper {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: #1e1e1e;
-        z-index: 9999;
-        display: flex;
-        flex-direction: column;
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background-color: #1e1e1e; z-index: 9999; display: flex; flex-direction: column;
     }
 
+    /* 3. HEADER V-LAB */
     .vlab-header {
-        height: auto;
-        min-height: 60px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #dee2e6;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        flex-shrink: 0;
+        height: auto; min-height: 60px; background-color: #ffffff; border-bottom: 1px solid #dee2e6;
+        display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; flex-shrink: 0;
     }
 
+    /* 4. AREA SPLIT SCREEN */
     .vlab-body {
-        display: flex;
-        flex-grow: 1;
-        overflow: hidden;
+        display: flex; flex-grow: 1; overflow: hidden;
     }
 
     .panel-kiri {
-        width: 50%;
-        background-color: #f8f9fa;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+        width: 50%; background-color: #f8f9fa; height: 100%; display: flex; flex-direction: column;
     }
 
+    /* REVISI CSS PANEL KANAN AGAR TIDAK KEPOTONG */
     .panel-kanan {
-        flex-grow: 1;
-        background-color: #000000;
-        height: 100%;
+        flex-grow: 1; 
+        background-color: #000000; 
+        display: flex; 
+        flex-direction: column; /* Mengubah panel kanan jadi tumpukan (Tombol Atas, Terminal Bawah) */
         position: relative;
-        padding: 5px;
     }
 
     .resizer {
-        width: 6px;
-        background-color: #dee2e6;
-        cursor: col-resize;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background-color 0.2s;
+        width: 6px; background-color: #dee2e6; cursor: col-resize; display: flex;
+        justify-content: center; align-items: center; transition: background-color 0.2s;
     }
 
-    .resizer:hover,
-    .resizer:active {
+    .resizer:hover, .resizer:active {
         background-color: #0d6efd;
     }
 
     .resizer::after {
-        content: "⋮";
-        color: #6c757d;
-        font-size: 18px;
+        content: "⋮"; color: #6c757d; font-size: 18px;
     }
 
+    /* Mencegah baris tombol tertekan (mengecil) */
+    .virtual-keys {
+        flex-shrink: 0; 
+    }
+
+    /* Terminal mengisi sisa ruang yang ada tanpa melebihi batas layar */
     #terminal-container {
-        width: 100%;
-        height: 100%;
+        width: 100%; 
+        flex-grow: 1; 
         overflow: hidden;
+        padding: 5px; 
     }
 </style>
 
@@ -108,8 +86,7 @@
         <div class="d-flex flex-column justify-content-center">
             <div class="mb-1">
                 <span class="badge bg-primary bg-opacity-10 text-primary border border-primary me-2">V-Lab System</span>
-                <span
-                    class="fw-bold text-dark fs-6"><?= esc((string) ($materi['judul_materi'] ?? 'Praktikum')) ?></span>
+                <span class="fw-bold text-dark fs-6"><?= esc((string) ($materi['judul_materi'] ?? 'Praktikum')) ?></span>
                 <span class="text-secondary mx-2">|</span>
                 <span class="text-secondary small font-monospace">
                     <i class="fa-brands fa-<?= esc(strtolower((string) ($os_name ?? 'linux'))) ?> me-1"></i> OS:
@@ -130,9 +107,7 @@
         <div class="panel-kiri" id="panelKiri">
             <?php $filePdf = isset($materi['file_pdf']) ? (string) $materi['file_pdf'] : ''; ?>
             <?php if (!empty($filePdf)): ?>
-                <iframe
-                    src="https://docs.google.com/gview?url=<?= urlencode(base_url('uploads/materi/' . $filePdf)) ?>&embedded=true"
-                    width="100%" height="100%" style="border: none;"></iframe>
+                <iframe src="https://docs.google.com/gview?url=<?= urlencode(base_url('uploads/materi/' . $filePdf)) ?>&embedded=true" width="100%" height="100%" style="border: none;"></iframe>
             <?php else: ?>
                 <div class="d-flex flex-column justify-content-center align-items-center h-100 text-secondary">
                     <i class="fa-regular fa-file-pdf fa-4x mb-3 text-muted"></i>
@@ -146,8 +121,8 @@
 
         <div class="panel-kanan" id="panelKanan">
             <?php if (!empty($vmid) && !empty($ticket)): ?>
-                <div class="d-flex gap-2 p-2 bg-dark border-bottom border-secondary overflow-auto"
-                    style="white-space: nowrap;">
+                
+                <div class="virtual-keys d-flex gap-2 p-2 bg-dark border-bottom border-secondary overflow-auto" style="white-space: nowrap;">
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('C')">Ctrl+C (Stop)</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('O')">Ctrl+O (Save Nano)</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x0D')">Enter (Nano)</button>
@@ -155,10 +130,11 @@
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x1B')">ESC</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x09')">TAB</button>
                 </div>
+
                 <div id="terminal-container"></div>
+                
             <?php else: ?>
-                <div
-                    class="d-flex flex-column justify-content-center align-items-center h-100 text-secondary font-monospace bg-dark">
+                <div class="d-flex flex-column justify-content-center align-items-center h-100 text-secondary font-monospace bg-dark">
                     <i class="fa-solid fa-triangle-exclamation fa-4x mb-3 text-warning"></i>
                     <h4 class="text-light">Gagal memuat mesin V-Lab.</h4>
                     <p>Tiket Terminal gagal didapatkan. Silakan muat ulang halaman.</p>
@@ -169,6 +145,7 @@
 </div>
 
 <script>
+    // === 1. LOGIKA RESIZER PANEL ===
     document.addEventListener('DOMContentLoaded', function () {
         const resizer = document.getElementById('dragMe');
         const kiri = document.getElementById('panelKiri');
@@ -203,11 +180,12 @@
         });
     });
 
+    // === 2. LOGIKA TERMINAL PROXMOX (Xterm.js) ===
     const vmid = '<?= esc((string) ($vmid ?? '')) ?>';
     const node = '<?= esc((string) ($node_name ?? 'vlab')) ?>';
     const ticket = encodeURIComponent('<?= esc((string) ($ticket ?? '')) ?>');
     const port = '<?= esc((string) ($port ?? '')) ?>';
-    const apiUser = 'root@pam!vlabci4';
+    const apiUser = 'root@pam!vlabci4'; 
 
     let term, fitAddon, socket, pingInterval;
 
@@ -221,7 +199,11 @@
         fitAddon = new window.FitAddon.FitAddon();
         term.loadAddon(fitAddon);
         term.open(document.getElementById('terminal-container'));
-        fitAddon.fit();
+        
+        // Jeda sedikit agar flexbox CSS selesai merender ukuran sebelum di-fit
+        setTimeout(() => {
+            fitAddon.fit();
+        }, 100);
 
         term.writeln('\x1b[33m[*] Menghubungkan ke Server V-Lab...\x1b[0m');
 
@@ -231,16 +213,19 @@
         socket.binaryType = 'arraybuffer';
 
         socket.onopen = () => {
+            // Handshake Wajib
             socket.send(apiUser + ':' + decodeURIComponent(ticket) + '\n');
-
-            fitAddon.fit();
+            
+            // Paksa hitung ulang ukuran layar dan laporkan ke Proxmox di detik pertama
             setTimeout(() => {
+                fitAddon.fit();
                 socket.send('1:' + term.cols + ':' + term.rows + ':');
             }, 500);
 
+            // PING ANTI-MATI
             pingInterval = setInterval(() => {
                 if (socket.readyState === window.WebSocket.OPEN) {
-                    socket.send("2");
+                    socket.send("2"); 
                 }
             }, 20000);
         };
@@ -279,21 +264,7 @@
         window.addEventListener('resize', () => fitAddon.fit());
     }
 
-    function sendCtrl(char) {
-        if (socket && socket.readyState === window.WebSocket.OPEN) {
-            const code = String.fromCharCode(char.charCodeAt(0) - 64);
-            const byteLength = new window.TextEncoder().encode(code).length;
-            socket.send('0:' + byteLength + ':' + code);
-        }
-    }
-
-    function sendKey(hexCode) {
-        if (socket && socket.readyState === window.WebSocket.OPEN) {
-            const byteLength = new window.TextEncoder().encode(hexCode).length;
-            socket.send('0:' + byteLength + ':' + hexCode);
-        }
-    }
-
+    // === 3. LOGIKA AKHIRI SESI & KEEP ALIVE WEB ===
     function akhiriSesiPraktikum(urlTarget) {
         if (confirm('Akhiri sesi praktikum? Mesin V-Lab Anda akan dimatikan.')) {
             window.onbeforeunload = null;
@@ -308,6 +279,23 @@
             .then(response => response.json())
             .catch(error => console.error("Heartbeat error:", error));
     }, 240000);
+
+    // === 4. FUNGSI TOMBOL VIRTUAL HP/DESKTOP ===
+    function sendCtrl(char) {
+        if (socket && socket.readyState === window.WebSocket.OPEN) {
+            // Mengubah huruf (C, O, X) menjadi kode Control (Ctrl)
+            const code = String.fromCharCode(char.charCodeAt(0) - 64);
+            const byteLength = new window.TextEncoder().encode(code).length;
+            socket.send('0:' + byteLength + ':' + code);
+        }
+    }
+
+    function sendKey(hexCode) {
+        if (socket && socket.readyState === window.WebSocket.OPEN) {
+            const byteLength = new window.TextEncoder().encode(hexCode).length;
+            socket.send('0:' + byteLength + ':' + hexCode);
+        }
+    }
 </script>
 
 <?= $this->endSection() ?>
