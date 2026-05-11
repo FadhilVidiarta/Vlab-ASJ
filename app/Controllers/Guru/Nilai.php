@@ -20,7 +20,7 @@ class Nilai extends BaseController
             ->paginate(5, 'nilai_group');
 
         $data = [
-            'title' => 'Kelola Nilai Tes Sumatif',
+            'title' => 'Nilai Tes Sumatif',
             'active_menu' => 'nilai',
             'admin' => $userModel->find(session()->get('id')),
             'daftar_nilai' => $daftar_nilai,

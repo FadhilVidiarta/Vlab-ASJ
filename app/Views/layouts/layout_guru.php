@@ -36,7 +36,7 @@
             </a>
             <a href="<?= base_url('guru/nilai') ?>"
                 class="nav-link <?= (isset($active_menu) && $active_menu == 'nilai') ? 'active' : '' ?>">
-                <i class="fa-solid fa-chart-bar"></i> Nilai Siswa
+                <i class="fa-solid fa-chart-bar"></i> Nilai Tes Sumatif
             </a>
             <a href="<?= base_url('guru/progres_praktikum') ?>"
                 class="nav-link <?= (isset($active_menu) && $active_menu == 'progres_praktikum') ? 'active' : '' ?>">
@@ -278,7 +278,6 @@
             });
         <?php endif; ?>
 
-        // === PERBAIKAN JS RESPONSIVE SIDEBAR ===
         document.addEventListener("DOMContentLoaded", function () {
             const btnToggle = document.getElementById('btnToggleSidebar');
             const body = document.body;
@@ -288,12 +287,11 @@
             if (btnToggle) {
                 btnToggle.addEventListener('click', function (e) {
                     e.preventDefault();
-                    e.stopPropagation(); // Mencegah bentrok klik
-                    body.classList.toggle('sidebar-toggled'); // NAMA INI SUDAH SINKRON DENGAN CSS
+                    e.stopPropagation();
+                    body.classList.toggle('sidebar-toggled');
                 });
             }
 
-            // 2. Klik area di luar sidebar otomatis nutup (khusus tampilan HP)
             document.addEventListener('click', function (event) {
                 if (window.innerWidth < 992 && sidebar) {
                     const isClickInsideSidebar = sidebar.contains(event.target);
@@ -305,7 +303,6 @@
                 }
             });
 
-            // 3. Menghindari reset sembarangan saat resize
             window.addEventListener('resize', () => {
                 if (window.innerWidth >= 992) {
                     body.classList.remove('sidebar-toggled');
@@ -313,7 +310,6 @@
             });
         });
 
-        // === FUNGSI LIHAT PASSWORD ===
         function togglePassword(inputId, iconId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(iconId);

@@ -20,7 +20,7 @@ class ProgresPraktikum extends BaseController
             ->paginate(5, 'progres_group');
 
         $data = [
-            'title' => 'Monitoring Praktikum V-Lab',
+            'title' => 'Progres Praktikum V-Lab',
             'active_menu' => 'progres_praktikum',
             'admin' => $userModel->find(session()->get('id')),
             'progres_praktikum' => $data_vlab,
