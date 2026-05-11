@@ -50,7 +50,7 @@
                         <label class="form-label small fw-bold text-secondary">ULANGI PASSWORD</label>
                         <div class="input-group">
                             <input type="password" name="conf_password" id="pass2" class="form-control"
-                                placeholder="Ulangi Password Baru" required>
+                                placeholder="Ulangi Password Baru" required minlength="8">
                             <span class="input-group-text"><i class="fa-solid fa-eye toggle-pass" data-target="pass2"
                                     style="cursor: pointer;"></i></span>
                         </div>
