@@ -124,7 +124,7 @@
                 
                 <div class="virtual-keys d-flex gap-2 p-2 bg-dark border-bottom border-secondary overflow-auto" style="white-space: nowrap;">
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('C')">Ctrl+C (Stop)</button>
-                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('O')">Ctrl+O (Save Nano)</button>
+                    <button class="btn btn-sm btn-primary py-0" onclick="sendCtrl('S')">Ctrl+S (Save)</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x0D')">Enter (Nano)</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('X')">Ctrl+X (Exit Nano)</button>
                     <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x1B')">ESC</button>
