@@ -130,8 +130,9 @@
         <div class="panel-kiri" id="panelKiri">
             <?php $filePdf = isset($materi['file_pdf']) ? (string) $materi['file_pdf'] : ''; ?>
             <?php if (!empty($filePdf)): ?>
-                <iframe src="<?= base_url('uploads/materi/' . $filePdf) ?>#toolbar=0" width="100%" height="100%"
-                    style="border: none;"></iframe>
+                <iframe
+                    src="https://docs.google.com/gview?url=<?= urlencode(base_url('uploads/materi/' . $filePdf)) ?>&embedded=true"
+                    width="100%" height="100%" style="border: none;"></iframe>
             <?php else: ?>
                 <div class="d-flex flex-column justify-content-center align-items-center h-100 text-secondary">
                     <i class="fa-regular fa-file-pdf fa-4x mb-3 text-muted"></i>
@@ -145,6 +146,15 @@
 
         <div class="panel-kanan" id="panelKanan">
             <?php if (!empty($vmid) && !empty($ticket)): ?>
+                <div class="d-flex gap-2 p-2 bg-dark border-bottom border-secondary overflow-auto"
+                    style="white-space: nowrap;">
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('C')">Ctrl+C (Stop)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('O')">Ctrl+O (Save Nano)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x0D')">Enter (Nano)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendCtrl('X')">Ctrl+X (Exit Nano)</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x1B')">ESC</button>
+                    <button class="btn btn-sm btn-secondary py-0" onclick="sendKey('\x09')">TAB</button>
+                </div>
                 <div id="terminal-container"></div>
             <?php else: ?>
                 <div
@@ -269,7 +279,21 @@
         window.addEventListener('resize', () => fitAddon.fit());
     }
 
-    // === 3. LOGIKA AKHIRI SESI & KEEP ALIVE WEB ===
+    function sendCtrl(char) {
+        if (socket && socket.readyState === window.WebSocket.OPEN) {
+            const code = String.fromCharCode(char.charCodeAt(0) - 64);
+            const byteLength = new window.TextEncoder().encode(code).length;
+            socket.send('0:' + byteLength + ':' + code);
+        }
+    }
+
+    function sendKey(hexCode) {
+        if (socket && socket.readyState === window.WebSocket.OPEN) {
+            const byteLength = new window.TextEncoder().encode(hexCode).length;
+            socket.send('0:' + byteLength + ':' + hexCode);
+        }
+    }
+
     function akhiriSesiPraktikum(urlTarget) {
         if (confirm('Akhiri sesi praktikum? Mesin V-Lab Anda akan dimatikan.')) {
             window.onbeforeunload = null;
