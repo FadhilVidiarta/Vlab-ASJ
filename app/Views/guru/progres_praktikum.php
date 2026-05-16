@@ -2,7 +2,6 @@
 
 <?php
 /**
- * Deklarasi variabel untuk menghindari error Intelephense
  * @var array $progres_praktikum
  */
 ?>
@@ -11,7 +10,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h4 class="fw-bold mb-0">Progres Praktikum V-Lab</h4>
+        <h4 class="fw-bold mb-0 text-dark">Progres Praktikum V-Lab</h4>
         <p class="text-secondary small mb-0">Pantau progres pengerjaan modul server dan status mesin virtual siswa
             secara real-time.</p>
     </div>
@@ -29,21 +28,21 @@
                 <span class="input-group-text bg-light border-0 rounded-start-pill ps-3">
                     <i class="fa-solid fa-search text-secondary"></i>
                 </span>
-                <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill search-input"
-                    placeholder="Cari Nama atau Kelas..." style="width: 250px;">
+                <input type="text" id="searchInput" class="form-control bg-light border-0 rounded-end-pill"
+                    placeholder="Cari Nama atau Kelas..." style="width: 250px; box-shadow: none;">
             </div>
         </div>
     </div>
 
     <div class="table-responsive">
         <table class="table-modern w-100" style="border-collapse: collapse;">
-            <thead>
+            <thead class="bg-light">
                 <tr>
-                    <th style="width: 5%;" class="text-center">NO</th>
-                    <th style="width: 25%;">NAMA SISWA / KELAS</th>
-                    <th style="width: 25%;" class="text-center">DAFTAR MODUL PRAKTIKUM</th>
-                    <th style="width: 20%;" class="text-center">STATUS MESIN (PROXMOX)</th>
-                    <th style="width: 25%; text-align: center;">AKSI UTAMA</th>
+                    <th style="width: 5%;" class="text-center text-secondary">NO</th>
+                    <th style="width: 25%;" class="text-secondary">NAMA SISWA / KELAS</th>
+                    <th style="width: 25%;" class="text-center text-secondary">MODUL PRAKTIKUM</th>
+                    <th style="width: 20%;" class="text-center text-secondary">STATUS VM (PROXMOX)</th>
+                    <th style="width: 25%; text-align: center;" class="text-secondary">AKSI UTAMA</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,13 +55,11 @@
                     </tr>
                 <?php else: ?>
                     <?php
-                    // PROSES GROUPING DATA BERDASARKAN ID USER DI LEVEL VIEW
                     $grouped_students = [];
                     foreach ($progres_praktikum as $log) {
                         $grouped_students[$log['idUser']]['nama'] = $log['nama'];
                         $grouped_students[$log['idUser']]['kelas'] = $log['kelas'];
 
-                        // Ambil VMID aktif jika ada pengerjaan yang masih memiliki VMID aktif
                         if (!isset($grouped_students[$log['idUser']]['vmid']) || $grouped_students[$log['idUser']]['vmid'] == 0) {
                             $grouped_students[$log['idUser']]['vmid'] = $log['vmid'];
                             $grouped_students[$log['idUser']]['idVlabCT'] = $log['idVlabCT'];
@@ -79,69 +76,72 @@
                         $has_active_os = ($student['vmid'] != 0);
                         ?>
 
-                        <tr class="student-row">
+                        <tr class="student-row border-bottom bg-white">
                             <td class="text-center fw-bold text-secondary align-middle">
                                 <?= $nomor++ ?>
                             </td>
 
-                            <td class="align-middle">
-                                <span class="fw-bold text-dark d-block fs-6">
+                            <td class="align-middle p-3">
+                                <span class="fw-bold text-dark d-block mb-1">
                                     <?= esc((string) $student['nama']) ?>
                                 </span>
-                                <span class="badge bg-soft-primary px-2 py-1 rounded mt-1">
+                                <span class="badge bg-light border text-secondary px-2 py-1 rounded">
                                     Kelas: <?= esc((string) ($student['kelas'] ?? '-')) ?>
                                 </span>
                             </td>
 
-                            <td class="align-middle text-center">
+                            <td class="align-middle text-center p-3">
                                 <?php if ($total_modul > 1): ?>
-                                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" type="button"
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
                                         data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
-                                        aria-expanded="false">
+                                        aria-expanded="false" style="font-size: 0.8rem;">
                                         <i class="fa-solid fa-folder-open me-1"></i> Tampilkan <?= $total_modul ?> Modul <i
-                                            class="fa-solid fa-chevron-down small ms-1"></i>
+                                            class="fa-solid fa-chevron-down ms-1"></i>
                                     </button>
                                 <?php else: ?>
-                                    <button class="btn btn-sm btn-light border rounded-pill px-3 text-muted" type="button" disabled>
+                                    <button class="btn btn-sm btn-light border rounded-pill px-3 text-muted" type="button" disabled
+                                        style="font-size: 0.8rem;">
                                         <i class="fa-solid fa-file me-1"></i> 1 Modul Terbuka
                                     </button>
                                 <?php endif; ?>
                             </td>
 
-                            <td class="align-middle text-center">
+                            <td class="align-middle text-center p-3">
                                 <?php if ($has_active_os): ?>
-                                    <span class="badge bg-light text-primary border border-primary px-3 py-2 fw-bold">
-                                        <i class="fa-solid fa-microchip me-1"></i> VMID: <?= $student['vmid'] ?> (Active)
+                                    <span class="text-primary small fw-bold d-inline-flex align-items-center">
+                                        <i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> VMID:
+                                        <?= $student['vmid'] ?> Aktif
                                     </span>
                                 <?php else: ?>
-                                    <span class="badge bg-soft-danger text-danger px-3 py-2 fw-bold">
-                                        <i class="fa-solid fa-trash-can me-1"></i> OS Tidak Ada / Dihapus
+                                    <span class="text-muted small d-inline-flex align-items-center">
+                                        <i class="fa-solid fa-circle me-1 text-muted opacity-50" style="font-size: 8px;"></i> OS
+                                        Dihapus
                                     </span>
                                 <?php endif; ?>
                             </td>
 
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle p-3">
                                 <?php if ($has_active_os): ?>
                                     <a href="<?= base_url('guru/hapus_mesin_siswa/' . $student['idVlabCT']) ?>"
                                         class="btn btn-sm btn-danger shadow-sm fw-bold px-3 py-1 rounded-pill"
-                                        onclick="return confirm('PENTING!\nAnda akan MENGHANCURKAN mesin server (VMID: <?= $student['vmid'] ?>) milik siswa ini dari Proxmox untuk menghemat resource VPS.\n\nYakin ingin melanjutkan?');">
+                                        style="font-size: 0.8rem;"
+                                        onclick="return confirm('PENTING!\nAnda akan MENGHANCURKAN mesin server (VMID: <?= $student['vmid'] ?>) milik siswa ini dari Proxmox.\n\nYakin ingin melanjutkan?');">
                                         <i class="fa-solid fa-power-off me-1"></i> Hapus OS Siswa
                                     </a>
                                 <?php else: ?>
-                                    <span class="text-muted small fst-italic">Resource Bersih</span>
+                                    <span class="text-secondary small fst-italic"><i class="fa-solid fa-check me-1"></i> Resource
+                                        Bersih</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
 
-                        <tr class="bg-light">
+                        <tr class="bg-light border-bottom">
                             <td colspan="5" class="p-0 border-0">
                                 <div class="collapse <?= ($total_modul == 1) ? 'show' : '' ?>"
                                     id="collapse-student-<?= $idUser ?>">
-                                    <div class="px-4 py-3 bg-light border-start border-primary border-4">
-                                        <h6 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-graduation-cap me-1"></i>
-                                            Rincian Capaian Modul Praktikum :</h6>
+                                    <div class="px-5 py-2 bg-light border-start border-secondary border-4">
 
-                                        <div class="row g-3">
+                                        <div class="bg-white border rounded-3 shadow-sm overflow-hidden mt-2 mb-3">
                                             <?php foreach ($student['aktivitas'] as $log):
                                                 $skor = $log['progres'] ?? 0;
                                                 $bg_color = 'bg-danger';
@@ -151,43 +151,42 @@
                                                     $bg_color = 'bg-success';
                                                 ?>
 
-                                                <div class="col-md-12">
-                                                    <div
-                                                        class="p-3 bg-white border rounded-3 shadow-sm d-flex justify-content-between align-items-center">
-                                                        <div style="width: 35%;">
+                                                <div
+                                                    class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center bg-white">
+                                                    <div style="width: 35%;">
+                                                        <span class="fw-bold text-dark d-block mb-1"
+                                                            style="font-size: 0.9rem;"><?= esc((string) $log['judul_materi']) ?></span>
+                                                        <small class="text-secondary d-block" style="font-size: 0.75rem;">
+                                                            <i class="fa-regular fa-calendar-plus me-1"></i>Mulai:
+                                                            <?= !empty($log['waktu_mulai']) ? date('d M Y, H:i', strtotime((string) $log['waktu_mulai'])) : '-' ?>
+                                                        </small>
+                                                        <small class="text-secondary d-block" style="font-size: 0.75rem;">
+                                                            <i class="fa-regular fa-calendar-check me-1"></i>Selesai:
+                                                            <?= !empty($log['waktu_selesai']) ? date('d M Y, H:i', strtotime((string) $log['waktu_selesai'])) : '<span class="text-warning fw-medium fst-italic">--Proses--</span>' ?>
+                                                        </small>
+                                                    </div>
+
+                                                    <div style="width: 45%;" class="px-3">
+                                                        <div class="d-flex justify-content-between align-items-center mb-1 fw-bold"
+                                                            style="font-size: 0.75rem;">
+                                                            <span class="text-secondary">Progress Skor</span>
                                                             <span
-                                                                class="fw-bold text-dark d-block mb-1"><?= esc((string) $log['judul_materi']) ?></span>
-                                                            <small class="text-muted d-block">
-                                                                <i class="fa-regular fa-calendar-plus me-1"></i>Mulai:
-                                                                <?= !empty($log['waktu_mulai']) ? date('d M Y, H:i', strtotime((string) $log['waktu_mulai'])) : '-' ?>
-                                                            </small>
-                                                            <small class="text-muted d-block">
-                                                                <i class="fa-regular fa-calendar-check me-1"></i>Selesai:
-                                                                <?= !empty($log['waktu_selesai']) ? date('d M Y, H:i', strtotime((string) $log['waktu_selesai'])) : '<span class="text-warning fw-medium">--Proses--</span>' ?>
-                                                            </small>
+                                                                class="<?= str_replace('bg-', 'text-', $bg_color) ?>"><?= $skor ?>%</span>
                                                         </div>
+                                                        <div class="progress" style="height: 6px;">
+                                                            <div class="progress-bar <?= $bg_color ?>" role="progressbar"
+                                                                style="width: <?= $skor ?>%;"></div>
+                                                        </div>
+                                                    </div>
 
-                                                        <div style="width: 45%;" class="px-3">
-                                                            <div
-                                                                class="d-flex justify-content-between align-items-center mb-1 small fw-bold">
-                                                                <span class="text-secondary">Progress Skor</span>
-                                                                <span
-                                                                    class="<?= str_replace('bg-', 'text-', $bg_color) ?>"><?= $skor ?>%</span>
-                                                            </div>
-                                                            <div class="progress" style="height: 8px;">
-                                                                <div class="progress-bar <?= $bg_color ?>" role="progressbar"
-                                                                    style="width: <?= $skor ?>%;"></div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div style="width: 15%;" class="text-end">
-                                                            <a href="<?= base_url('guru/hapus_log/' . $log['idVlabCT']) ?>"
-                                                                class="btn btn-sm btn-outline-danger border-0"
-                                                                onclick="return confirm('Hapus riwayat database untuk modul ini?');"
-                                                                title="Hapus Riwayat Log">
-                                                                <i class="fa-solid fa-trash-can"></i> Hapus Log
-                                                            </a>
-                                                        </div>
+                                                    <div style="width: 15%;" class="text-end">
+                                                        <a href="<?= base_url('guru/hapus_log/' . $log['idVlabCT']) ?>"
+                                                            class="btn btn-sm btn-outline-danger border-0 p-1 rounded"
+                                                            style="font-size: 0.8rem;"
+                                                            onclick="return confirm('Hapus riwayat database untuk modul ini?');"
+                                                            title="Hapus Riwayat Log">
+                                                            <i class="fa-solid fa-trash-can"></i> Hapus Log
+                                                        </a>
                                                     </div>
                                                 </div>
 
