@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive" style="overflow-x: auto; overflow-y: hidden;">
         <table class="table-modern w-100" style="border-collapse: collapse;">
             <thead class="bg-light">
                 <tr>
@@ -107,17 +107,15 @@
                             </td>
 
                             <td class="align-middle text-center p-3">
-                                <?php if ($has_active_os): ?>
-                                    <span class="text-primary small fw-bold d-inline-flex align-items-center">
-                                        <i class="fa-solid fa-circle me-1" style="font-size: 8px;"></i> VMID:
-                                        <?= $student['vmid'] ?> Aktif
-                                    </span>
-                                <?php else: ?>
-                                    <span class="text-muted small d-inline-flex align-items-center">
-                                        <i class="fa-solid fa-circle me-1 text-muted opacity-50" style="font-size: 8px;"></i> OS
-                                        Dihapus
-                                    </span>
-                                <?php endif; ?>
+                                <span class="badge bg-light text-secondary border px-3 py-1 rounded-pill"
+                                    style="font-size: 0.85rem;">
+                                    <?php if ($has_active_os): ?>
+                                        <i class="text-dark fw-bold me-1">VMID:</i> <span
+                                            class="text-dark fw-bold"><?= $student['vmid'] ?></span>
+                                    <?php else: ?>
+                                        <i class="fa-solid fa-trash-can me-1 opacity-50"></i> OS Dihapus
+                                    <?php endif; ?>
+                                </span>
                             </td>
 
                             <td class="text-center align-middle p-3">
@@ -139,9 +137,10 @@
                             <td colspan="5" class="p-0 border-0">
                                 <div class="collapse <?= ($total_modul == 1) ? 'show' : '' ?>"
                                     id="collapse-student-<?= $idUser ?>">
-                                    <div class="px-5 py-2 bg-light border-start border-secondary border-4">
 
-                                        <div class="bg-white border rounded-3 shadow-sm overflow-hidden mt-2 mb-3">
+                                    <div class="p-3 bg-light border-start border-secondary border-4 ms-2 me-2 my-2">
+
+                                        <div class="bg-white border rounded-3 shadow-sm overflow-hidden">
                                             <?php foreach ($student['aktivitas'] as $log):
                                                 $skor = $log['progres'] ?? 0;
                                                 $bg_color = 'bg-danger';
@@ -152,7 +151,7 @@
                                                 ?>
 
                                                 <div
-                                                    class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center bg-white">
+                                                    class="px-3 py-2 border-bottom d-flex justify-content-between align-items-center bg-white m-0">
                                                     <div style="width: 35%;">
                                                         <span class="fw-bold text-dark d-block mb-1"
                                                             style="font-size: 0.9rem;"><?= esc((string) $log['judul_materi']) ?></span>
