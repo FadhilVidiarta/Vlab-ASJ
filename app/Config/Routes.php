@@ -92,6 +92,7 @@ $routes->group('guru', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('progres_praktikum', 'Guru\ProgresPraktikum::index');
     $routes->get('hapus_log/(:num)', 'Guru\ProgresPraktikum::hapus_log/$1');
+    $routes->get('hapus_mesin_siswa/(:segment)', 'Guru\ProgresPraktikum::hapus_mesin_siswa/$1');
 
 });
 

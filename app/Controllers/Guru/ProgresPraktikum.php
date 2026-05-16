@@ -5,6 +5,7 @@ namespace App\Controllers\Guru;
 use App\Controllers\BaseController;
 use App\Models\UserModel;
 use App\Models\VlabModel;
+use App\Libraries\ProxmoxAPI;
 
 class ProgresPraktikum extends BaseController
 {
@@ -41,5 +42,30 @@ class ProgresPraktikum extends BaseController
         }
 
         return redirect()->back()->with('error', 'Data riwayat praktikum tidak ditemukan.');
+    }
+
+    public function hapus_mesin_siswa(string $id_vlab)
+    {
+        $vlabModel = new VlabModel();
+        $log = $vlabModel->find($id_vlab);
+
+        // Cek apakah data ada dan VMID bukan 0 (artinya mesin masih hidup/ada)
+        if ($log && $log['vmid'] != 0) {
+            $vmid = $log['vmid'];
+            $node_name = 'vlab'; // Sesuaikan dengan nama node Proxmox Anda
+
+            try {
+                $api = new ProxmoxAPI();
+                $api->request("/nodes/{$node_name}/lxc/{$vmid}/status/stop", "POST");
+                sleep(4);
+                $api->request("/nodes/{$node_name}/lxc/{$vmid}", "DELETE");
+            } catch (\Exception $e) {
+            }
+            $vlabModel->update($id_vlab, ['vmid' => 0]);
+
+            return redirect()->back()->with('success', 'OS Server (VMID: ' . $vmid . ') milik siswa berhasil dihancurkan. Resource VPS berhasil dihemat!');
+        }
+
+        return redirect()->back()->with('error', 'Mesin tidak ditemukan atau sudah dihapus sebelumnya.');
     }
 }
