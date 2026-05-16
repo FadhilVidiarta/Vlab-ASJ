@@ -18,6 +18,7 @@ body {
   background-color: var(--bg-body);
   color: var(--text-dark);
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* ========================================= */
