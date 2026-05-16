@@ -81,7 +81,7 @@
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-list-ol text-secondary"></i></span>
                             <input type="number" name="no_absen" class="form-control" 
-                                   value="<?= old('no_absen') ?>" placeholder="Masukan no absen" required minlength="2">
+                                   value="<?= old('no_absen') ?>" placeholder="Masukan no absen" required min="2" max="36">
                         </div>
                     </div>
                 </div>

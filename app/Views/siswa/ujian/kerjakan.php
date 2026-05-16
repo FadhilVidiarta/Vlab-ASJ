@@ -175,7 +175,8 @@
     const formUjian = document.getElementById('formUjian');
     let isSubmitting = false;
     let isAlerting = false;
-    // REVISI: Mengubah $ujian['id'] menjadi $ujian['idUjian']
+    let isConfirmingDialog = false;
+
     const violationKey = 'pelanggaran_ujian_<?= $ujian['idUjian'] ?>';
 
     document.querySelectorAll('input[type="radio"]').forEach(radio => {
@@ -201,6 +202,7 @@
             lepaskanSensor();
             localStorage.removeItem(violationKey);
 
+            isConfirmingDialog = true;
             alert("Waktu pengerjaan habis! Jawaban Anda dikumpulkan otomatis.");
             formUjian.submit();
             return;
@@ -238,6 +240,7 @@
         pelanggaran++;
         localStorage.setItem(violationKey, pelanggaran);
 
+        isConfirmingDialog = true;
         if (pelanggaran >= maxPelanggaran) {
             isSubmitting = true;
             lepaskanSensor();
@@ -246,16 +249,16 @@
             formUjian.submit();
         } else {
             alert(`PERINGATAN ${pelanggaran}/${maxPelanggaran}!\n\nSistem mendeteksi Anda: ${alasan}\n\nJika mencapai 3 kali, ujian akan dikumpulkan otomatis dengan nilai seadanya.`);
-            setTimeout(() => { isAlerting = false; }, 500);
+            setTimeout(() => { isAlerting = false; isConfirmingDialog = false; }, 500);
         }
     }
 
     function handleWindowBlur() {
-        if (!isSubmitting) catatPelanggaran("Mengeklik / beralih ke aplikasi atau tab lain");
+        if (!isSubmitting && !isConfirmingDialog) catatPelanggaran("Mengeklik / beralih ke aplikasi atau tab lain");
     }
 
     function handleVisibilityChange() {
-        if (document.hidden && !isSubmitting) catatPelanggaran("Menyembunyikan jendela ujian");
+        if (document.hidden && !isSubmitting && !isConfirmingDialog) catatPelanggaran("Menyembunyikan jendela ujian");
     }
 
     history.pushState(null, null, location.href);
@@ -303,7 +306,10 @@
             });
 
             if (unanswered > 0) {
+                isConfirmingDialog = true;
                 alert(`Peringatan: Terdapat ${unanswered} soal yang belum dijawab!\n\nSilakan periksa kotak yang berwarna merah dan lengkapi jawaban Anda sebelum mengumpulkan.`);
+                setTimeout(() => { isConfirmingDialog = false; }, 500);
+
                 if (firstUnanswered) {
                     const headerOffset = document.getElementById('headerUjian').offsetHeight + 30;
                     const elementPosition = firstUnanswered.getBoundingClientRect().top;
@@ -313,12 +319,15 @@
                 return false;
             }
 
+            isConfirmingDialog = true;
             let konfirmasi = confirm('Anda telah menjawab semua soal. Yakin ingin mengumpulkan sekarang?');
             if (konfirmasi) {
                 isSubmitting = true;
                 lepaskanSensor();
                 localStorage.removeItem(violationKey);
                 formUjian.submit();
+            } else {
+                setTimeout(() => { isConfirmingDialog = false; }, 500);
             }
         }
     });
