@@ -18,7 +18,7 @@ class ProgresPraktikum extends BaseController
             ->join('users', 'users.idUser = vlab_ct.idUser', 'left')
             ->join('materi', 'materi.idMateri = vlab_ct.idMateri', 'left')
             ->orderBy('vlab_ct.idVlabCT', 'DESC')
-            ->paginate(5, 'progres_group');
+            ->paginate(20, 'progres_group');
 
         $data = [
             'title' => 'Progres Praktikum V-Lab',
@@ -49,10 +49,9 @@ class ProgresPraktikum extends BaseController
         $vlabModel = new VlabModel();
         $log = $vlabModel->find($id_vlab);
 
-        // Cek apakah data ada dan VMID bukan 0 (artinya mesin masih hidup/ada)
         if ($log && $log['vmid'] != 0) {
             $vmid = $log['vmid'];
-            $node_name = 'vlab'; // Sesuaikan dengan nama node Proxmox Anda
+            $node_name = 'vlab';
 
             try {
                 $api = new ProxmoxAPI();

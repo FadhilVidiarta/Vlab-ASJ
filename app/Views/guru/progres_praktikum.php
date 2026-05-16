@@ -91,19 +91,12 @@
                             </td>
 
                             <td class="align-middle text-center p-3">
-                                <?php if ($total_modul > 1): ?>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
-                                        aria-expanded="false" style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-folder-open me-1"></i> Tampilkan <?= $total_modul ?> Modul <i
-                                            class="fa-solid fa-chevron-down ms-1"></i>
-                                    </button>
-                                <?php else: ?>
-                                    <button class="btn btn-sm btn-light border rounded-pill px-3 text-muted" type="button" disabled
-                                        style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-file me-1"></i> 1 Modul Terbuka
-                                    </button>
-                                <?php endif; ?>
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
+                                    aria-expanded="false" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-folder-open me-1"></i> Detail <?= $total_modul ?> Modul <i
+                                        class="fa-solid fa-chevron-down ms-1"></i>
+                                </button>
                             </td>
 
                             <td class="align-middle text-center p-3">
@@ -135,9 +128,7 @@
 
                         <tr class="bg-light border-bottom">
                             <td colspan="5" class="p-0 border-0">
-                                <div class="collapse <?= ($total_modul == 1) ? 'show' : '' ?>"
-                                    id="collapse-student-<?= $idUser ?>">
-
+                                <div class="collapse" id="collapse-student-<?= $idUser ?>">
                                     <div class="p-3 bg-light border-start border-secondary border-4 ms-2 me-2 my-2">
 
                                         <div class="bg-white border rounded-3 shadow-sm overflow-hidden">
