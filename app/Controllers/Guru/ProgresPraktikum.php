@@ -35,8 +35,17 @@ class ProgresPraktikum extends BaseController
     public function hapus_log(string $id_vlab)
     {
         $vlabModel = new VlabModel();
+        $log = $vlabModel->find($id_vlab);
 
-        if ($vlabModel->find($id_vlab)) {
+        if ($log) {
+            $idUser = $log['idUser'];
+
+            $total_log = $vlabModel->where('idUser', $idUser)->countAllResults();
+
+            if ($total_log == 1 && $log['vmid'] != 0) {
+                return redirect()->back()->with('error', 'GAGAL MENGHAPUS LOG: Mesin OS (VMID: ' . $log['vmid'] . ') milik siswa ini masih AKTIF di Proxmox! Anda wajib mengklik tombol "Hapus OS Siswa" terlebih dahulu untuk menghancurkan mesinnya sebelum menghapus riwayat terakhir ini.');
+            }
+
             $vlabModel->delete($id_vlab);
             return redirect()->back()->with('success', 'Riwayat praktikum siswa berhasil dihapus.');
         }
