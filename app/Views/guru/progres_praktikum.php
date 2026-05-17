@@ -131,7 +131,7 @@
                                         class="btn btn-sm btn-danger shadow-sm fw-bold px-3 py-1 rounded-pill"
                                         style="font-size: 0.8rem;"
                                         onclick="return confirm('PENTING!\nAnda akan Menghapus mesin server (VMID: <?= $student['vmid'] ?>) milik siswa ini dari Proxmox.\n\nYakin ingin melanjutkan?');">
-                                        <i class="fa-solid fa-power-off me-1"></i> Hapus OS Siswa
+                                        <i class="fa-solid fa-trash-can me-1"></i> Hapus OS Siswa
                                     </a>
                                 <?php else: ?>
                                     <span class="text-secondary small fst-italic"><i class="fa-solid fa-check me-1"></i> Resource
