@@ -169,8 +169,22 @@ class Ujian extends BaseController
 
     public function hapus(string $id_ujian)
     {
+        $soalTerkait = $this->soalModel->where('idUjian', $id_ujian)->findAll();
+
+        foreach ($soalTerkait as $soal) {
+            if (!empty($soal['file_gambar']) && file_exists('uploads/soal/' . $soal['file_gambar'])) {
+                unlink('uploads/soal/' . $soal['file_gambar']);
+            }
+        }
+
+        $this->soalModel->where('idUjian', $id_ujian)->delete();
+
+        $nilaiModel = new \App\Models\NilaiModel();
+        $nilaiModel->where('idUjian', $id_ujian)->delete();
+
         $this->ujianModel->delete($id_ujian);
-        return redirect()->to('guru/ujian')->with('success', 'Tes Sumatif berhasil dihapus.');
+
+        return redirect()->to('guru/ujian')->with('success', 'Tes Sumatif beserta semua soal dan nilainya berhasil dihapus permanen.');
     }
 
     public function edit_soal(string $id_soal, string $id_ujian)
