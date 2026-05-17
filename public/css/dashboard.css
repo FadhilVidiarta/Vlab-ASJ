@@ -289,10 +289,6 @@ body {
   font-size: 1.5rem;
 }
 
-.btn[aria-expanded="true"] .icon-chevron {
-  transform: rotate(180deg);
-}
-
 /* ========================================= */
 /* === RESPONSIVE LOGIC SIDEBAR TOGGLE === */
 /* ========================================= */
