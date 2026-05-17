@@ -11,7 +11,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-bold mb-0 text-dark">Progres Praktikum V-Lab</h4>
-        <p class="text-secondary small mb-0">Pantau progres pengerjaan modul server dan status mesin virtual siswa
+        <p class="text-secondary small mb-0">Pantau progres pengerjaan materi server dan container virtual siswa
             secara real-time.</p>
     </div>
 </div>
@@ -40,8 +40,8 @@
                 <tr>
                     <th style="width: 5%;" class="text-center text-secondary">NO</th>
                     <th style="width: 25%;" class="text-secondary">NAMA SISWA / KELAS</th>
-                    <th style="width: 25%;" class="text-center text-secondary">MODUL PRAKTIKUM</th>
-                    <th style="width: 20%;" class="text-center text-secondary">STATUS VM (PROXMOX)</th>
+                    <th style="width: 25%;" class="text-center text-secondary">MATERI PRAKTIKUM</th>
+                    <th style="width: 20%;" class="text-center text-secondary">VMID (CT PROXMOX)</th>
                     <th style="width: 25%; text-align: center;" class="text-secondary">AKSI UTAMA</th>
                 </tr>
             </thead>
@@ -72,7 +72,7 @@
                     $nomor = ($page - 1) * 5 + 1;
 
                     foreach ($grouped_students as $idUser => $student):
-                        $total_modul = count($student['aktivitas']);
+                        $total_materi = count($student['aktivitas']);
                         $has_active_os = ($student['vmid'] != 0);
                         ?>
 
@@ -91,12 +91,20 @@
                             </td>
 
                             <td class="align-middle text-center p-3">
-                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
-                                    aria-expanded="false" style="font-size: 0.8rem;">
-                                    <i class="fa-solid fa-folder-open me-1"></i> Detail <?= $total_modul ?> Modul <i
-                                        class="fa-solid fa-chevron-down ms-1"></i>
-                                </button>
+                                <?php if ($total_materi > 1): ?>
+                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
+                                        data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
+                                        aria-expanded="false" style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-folder-open me-1"></i> Detail <?= $total_materi ?> Materi
+                                        <i class="fa-solid fa-chevron-down ms-1 icon-chevron"
+                                            style="transition: transform 0.3s ease;"></i>
+                                    </button>
+                                <?php else: ?>
+                                    <button class="btn btn-sm btn-light border rounded-pill px-3 text-muted" type="button" disabled
+                                        style="font-size: 0.8rem;">
+                                        <i class="fa-solid fa-file me-1"></i> 1 Materi Terbuka
+                                    </button>
+                                <?php endif; ?>
                             </td>
 
                             <td class="align-middle text-center p-3">
@@ -116,7 +124,7 @@
                                     <a href="<?= base_url('guru/hapus_mesin_siswa/' . $student['idVlabCT']) ?>"
                                         class="btn btn-sm btn-danger shadow-sm fw-bold px-3 py-1 rounded-pill"
                                         style="font-size: 0.8rem;"
-                                        onclick="return confirm('PENTING!\nAnda akan MENGHANCURKAN mesin server (VMID: <?= $student['vmid'] ?>) milik siswa ini dari Proxmox.\n\nYakin ingin melanjutkan?');">
+                                        onclick="return confirm('PENTING!\nAnda akan Menghapus mesin server (VMID: <?= $student['vmid'] ?>) milik siswa ini dari Proxmox.\n\nYakin ingin melanjutkan?');">
                                         <i class="fa-solid fa-power-off me-1"></i> Hapus OS Siswa
                                     </a>
                                 <?php else: ?>
@@ -173,7 +181,7 @@
                                                         <a href="<?= base_url('guru/hapus_log/' . $log['idVlabCT']) ?>"
                                                             class="btn btn-sm btn-outline-danger border-0 p-1 rounded"
                                                             style="font-size: 0.8rem;"
-                                                            onclick="return confirm('Hapus riwayat database untuk modul ini?');"
+                                                            onclick="return confirm('Hapus riwayat untuk materi ini?');"
                                                             title="Hapus Riwayat Log">
                                                             <i class="fa-solid fa-trash-can"></i> Hapus Log
                                                         </a>
