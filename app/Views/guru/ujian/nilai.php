@@ -71,8 +71,7 @@
                                 </span>
                             </td>
 
-                            <td class="text-center align-middle p-3 text-secondary small">
-                                <i class="fa-regular fa-calendar me-1"></i>
+                            <td class="text-center align-middle p-3 text-black small">
                                 <?= isset($n['tanggal_mengerjakan']) ? date('d M Y, H:i', strtotime((string) $n['tanggal_mengerjakan'])) : 'Telah Dikerjakan' ?>
                             </td>
 
@@ -94,6 +93,6 @@
             <?= isset($pager) ? $pager->links('nilai_group', 'default_full') : '' ?>
         </div>
     </div>
-</div>s
+</div>
 
 <?= $this->endSection() ?>
