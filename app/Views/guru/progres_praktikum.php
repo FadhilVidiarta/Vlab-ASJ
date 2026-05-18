@@ -97,20 +97,13 @@
                             </td>
 
                             <td class="align-middle text-center p-3">
-                                <?php if ($total_materi > 1): ?>
-                                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
-                                        data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
-                                        aria-expanded="false" style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-folder-open me-1"></i> Detail <?= $total_materi ?> Materi
-                                        <i class="fa-solid fa-chevron-down ms-1 icon-chevron"
-                                            style="transition: transform 0.3s ease;"></i>
-                                    </button>
-                                <?php else: ?>
-                                    <button class="btn btn-sm btn-light border rounded-pill px-3 text-muted" type="button" disabled
-                                        style="font-size: 0.8rem;">
-                                        <i class="fa-solid fa-file me-1"></i> 1 Materi Terbuka
-                                    </button>
-                                <?php endif; ?>
+                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-bold" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse-student-<?= $idUser ?>"
+                                    aria-expanded="false" style="font-size: 0.8rem;">
+                                    <i class="fa-solid fa-folder-open me-1"></i> Detail <?= $total_materi ?> Materi
+                                    <i class="fa-solid fa-chevron-down ms-1 icon-chevron"
+                                        style="transition: transform 0.3s ease;"></i>
+                                </button>
                             </td>
 
                             <td class="align-middle text-center p-3">
