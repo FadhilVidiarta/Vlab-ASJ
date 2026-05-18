@@ -69,7 +69,12 @@ class ProgresPraktikum extends BaseController
                 $api->request("/nodes/{$node_name}/lxc/{$vmid}", "DELETE");
             } catch (\Exception $e) {
             }
-            $vlabModel->update($id_vlab, ['vmid' => 0]);
+
+            $idUser = $log['idUser'];
+            $vlabModel->where('idUser', $idUser)
+                ->where('vmid', $vmid)
+                ->set(['vmid' => 0])
+                ->update();
 
             return redirect()->back()->with('success', 'OS Server (VMID: ' . $vmid . ') milik siswa berhasil dihancurkan. Resource VPS berhasil dihemat!');
         }
